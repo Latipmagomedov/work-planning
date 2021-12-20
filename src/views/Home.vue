@@ -1,18 +1,49 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <StartScreen v-if="!auth" @closeStartScreen="auth = true" />
+    <div class="home__content" v-if="auth">
+      <Header @search="search" />
+      <Banner class="home__banner" />
+    </div>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import Header from "@/components/header";
+import Banner from "@/components/banner";
+import StartScreen from "@/components/startScreen";
 
 export default {
-  name: 'Home',
+  name: "Home",
   components: {
-    HelloWorld
+    Header,
+    Banner,
+    StartScreen,
+  },
+  data() {
+    return {
+      auth: false,
+    };
+  },
+  mounted() {
+    if (localStorage.auth) {
+      this.auth = true;
+    } else {
+      this.auth = false;
+    }
+  },
+  methods: {
+    search(value) {
+      console.log(value);
+    },
+  },
+};
+</script>
+
+<style lang="scss" scoped>
+.home {
+  &__banner {
+    margin-top: 7px;
   }
 }
-</script>
+</style>
