@@ -2,7 +2,9 @@
   <div class="banner container">
     <div class="banner__content">
       <div class="banner__left">
-        <h1 class="banner__hi">Hi, {{ user ? `${user.name} ${user.surname}` : 'User'}}</h1>
+        <h1 class="banner__hi">
+          Hi, {{ user ? `${user.name} ${user.surname}` : "User" }}
+        </h1>
         <div class="banner__date-time">
           <p class="banner__time">{{ fullTime }}</p>
           <p class="banner__date">{{ fullDate }}</p>
@@ -24,7 +26,7 @@ export default {
     return {
       fullDate: "",
       fullTime: "",
-      user: '',
+      user: "",
     };
   },
   mounted() {
@@ -61,11 +63,11 @@ export default {
   &__content {
     height: 150px;
     padding: 13px 15px;
-    border-radius: 10px;
+    border-radius: 13px;
     display: flex;
     justify-content: space-between;
     background-color: $brand-col;
-    background: linear-gradient(to bottom right, $brand-col, #ce9ffc);
+    background: linear-gradient(to bottom right, $brand-col, #FFC709);
   }
 
   &__left {

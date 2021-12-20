@@ -53,7 +53,6 @@ export default {
         if (this.form.name || this.form.surname) {
           localStorage.setItem("user", JSON.stringify(this.form));
         }
-
         this.$emit("closeStartScreen");
       }
     },
@@ -62,25 +61,32 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+$pc-version: 480px;
 .start-screen {
   width: 100%;
   margin: 0 auto;
-  min-height: 600px;
+  min-height: 500px;
   height: 100vh;
   background-color: #000;
 
   &__content-greetings {
-    height: 100%;
+    height: 85%;
     max-width: 380px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
+
+    @media (min-width: $pc-version) {
+      width: 100%;
+      max-width: 900px;
+      flex-direction: row;
+    }
   }
   &__illustration-greetings {
     margin-top: 40px;
     width: 300px;
-    height: 330px;
+    height: 300px;
     background-image: url(../../assets/images/illustrations/start-illustration.svg);
     background-size: contain;
     background-position: center;
@@ -89,10 +95,13 @@ export default {
   &__bottom-greetings {
     width: 100%;
     padding-left: 10px;
-    margin-bottom: 60px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+
+    @media (min-width: $pc-version) {
+      max-width: 500px;
+    }
   }
   &__subtitle-greetings {
     color: $brand-col;
@@ -114,12 +123,20 @@ export default {
   }
 
   &__content-acquaintance {
-    height: 100%;
+    height: 85%;
     max-width: 380px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
+
+    @media (min-width: $pc-version) {
+      width: 100%;
+      max-width: 900px;
+      height: 100%;
+      padding-bottom: 100px;
+      justify-content: center;
+    }
   }
   &__illustration-acquaintance {
     margin-top: 40px;
@@ -129,13 +146,21 @@ export default {
     background-size: contain;
     background-position: center;
     background-repeat: no-repeat;
+
+    @media (min-width: $pc-version) {
+      width: 200px;
+      height: 200px;
+    }
   }
   &__bottom-acquaintance {
     width: 100%;
-    margin-bottom: 60px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+
+    @media (min-width: $pc-version) {
+      max-width: 450px;
+    }
   }
   &__title-acquaintance {
     font-size: 20px;

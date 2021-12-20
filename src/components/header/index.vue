@@ -42,9 +42,17 @@ export default {
       position: "grid",
     };
   },
+  created() {
+    if (localStorage.position) {
+      this.position = localStorage.position;
+      this.$emit("togglePostion", this.position);
+    }
+  },
   methods: {
     togglePostion(position) {
       this.position = position;
+      localStorage.setItem("position", position);
+      this.$emit("togglePostion", position);
     },
   },
 };
@@ -52,20 +60,20 @@ export default {
 
 <style lang="scss" scoped>
 .header {
+  padding-top: 8px;
   width: 100%;
-  height: 65px;
   display: flex;
   align-items: center;
 
   &__search {
     min-width: 100%;
     height: 50px;
-    padding: 0 10px;
+    padding: 0 13px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     background-color: $main-col;
-    border-radius: 8px;
+    border-radius: 13px;
   }
 
   &__search-icon {
