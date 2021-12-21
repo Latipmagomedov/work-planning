@@ -67,7 +67,7 @@ export default {
     display: flex;
     justify-content: space-between;
     background-color: $brand-col;
-    background: linear-gradient(to bottom right, $brand-col, #FFC709);
+    background: linear-gradient(to bottom right, $brand-col, #bb2aff);
   }
 
   &__left {

@@ -11,9 +11,14 @@ const routes = [
     component: Home,
   },
   {
-    path: "/archive",
-    name: "Archive",
-    component: () => import("@/views/archive"),
+    path: "/favorites",
+    name: "Favorites",
+    component: () => import("@/views/favorites"),
+  },
+  {
+    path: "/settings",
+    name: "Settings",
+    component: () => import("@/views/settings"),
   },
 ];
 

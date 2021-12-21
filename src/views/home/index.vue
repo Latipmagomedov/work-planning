@@ -19,6 +19,8 @@
           />
         </div>
       </div>
+      <add-task-btn />
+      <nav-menu />
     </div>
   </div>
 </template>
@@ -28,6 +30,8 @@ import BannerHome from "@/components/banner";
 import HeaderSearch from "@/components/header";
 import StartScreen from "@/components/startScreen";
 import TaskCard from "@/components/card";
+import NavMenu from "@/components/navMenu";
+import AddTaskBtn from "@/components/addTaskBtn";
 
 export default {
   name: "Home",
@@ -36,6 +40,8 @@ export default {
     HeaderSearch,
     StartScreen,
     TaskCard,
+    NavMenu,
+    AddTaskBtn
   },
   data() {
     return {
@@ -163,7 +169,7 @@ export default {
 
   &__tasks {
     margin-top: 0;
-    margin-left: -3%;
+    margin-left: -2%;
     padding-bottom: 15px;
     width: 100%;
     display: flex;

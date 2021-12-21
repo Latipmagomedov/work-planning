@@ -18,6 +18,7 @@
         {{ subtask.title }}
       </li>
     </ul>
+    <div class="card__shadow"></div>
   </div>
 </template>
 
@@ -38,9 +39,10 @@ export default {
 
 <style lang="scss" scoped>
 .card {
-  margin-top: 3%;
-  margin-left: 3%;
-  width: 47%;
+  position: relative;
+  margin-top: 2%;
+  margin-left: 2%;
+  width: 48%;
   min-height: 130px;
   max-height: 130px;
   padding: 10px 13px;
@@ -48,8 +50,23 @@ export default {
   background-color: $main-col;
   overflow: hidden;
 
+  &__shadow {
+    display: block;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 40%;
+    background: linear-gradient(
+      to top,
+      rgba(25, 25, 25, 1),
+      rgba(25, 25, 25, 0.85),
+      rgba(25, 25, 25, 0)
+    );
+  }
+
   &__date {
-    color: $brand-col;
+    color: #ffffff7c;
     font-size: 9px;
   }
 
