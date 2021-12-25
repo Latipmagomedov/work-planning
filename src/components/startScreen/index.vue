@@ -36,6 +36,7 @@
 
 <script>
 export default {
+  name: 'StartScreen',
   data() {
     return {
       step: 1,

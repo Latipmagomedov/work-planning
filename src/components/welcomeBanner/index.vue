@@ -21,7 +21,7 @@
 
 <script>
 export default {
-  name: "Banner",
+  name: "WelcomeBanner",
   data() {
     return {
       fullDate: "",

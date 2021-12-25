@@ -1,12 +1,15 @@
 <template>
-  <div class="nav-menu">
-    <div class="nav-menu__wrapper container">
-      <div class="nav-menu__buttons">
+  <div class="desktop-menu">
+    <div
+      class="desktop-menu__wrapper"
+      :class="{ 'desktop-menu__wrapper_active': open }"
+    >
+      <ul class="desktop-menu__links">
         <router-link
-          tag="button"
+          tag="li"
           to="/"
-          active-class="nav-menu__btn_active"
-          class="nav-menu__btn"
+          class="desktop-menu__link"
+          active-class="desktop-menu__link_active"
         >
           <svg
             width="24"
@@ -20,12 +23,13 @@
               fill="#fff"
             />
           </svg>
+          <p>Главная</p>
         </router-link>
         <router-link
-          tag="button"
+          tag="li"
           to="/favorites"
-          active-class="nav-menu__btn_active"
-          class="nav-menu__btn"
+          class="desktop-menu__link"
+          active-class="desktop-menu__link_active"
         >
           <svg
             width="24"
@@ -39,12 +43,13 @@
               fill="#fff"
             />
           </svg>
+          <p>Избранное</p>
         </router-link>
         <router-link
-          tag="button"
+          tag="li"
           to="/settings"
-          active-class="nav-menu__btn_active"
-          class="nav-menu__btn"
+          class="desktop-menu__link"
+          active-class="desktop-menu__link_active"
         >
           <svg
             width="24"
@@ -60,59 +65,110 @@
               fill="#fff"
             />
           </svg>
+          <p>Настройки</p>
         </router-link>
-      </div>
+      </ul>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: "NavMenu",
+  name: "DesktopMenu",
+  data() {
+    return {
+      open: false,
+    };
+  },
+  methods: {
+    toggleMenu() {
+      this.open = !this.open;
+    },
+  },
 };
 </script>
 
 <style lang="scss" scoped>
-.nav-menu {
+.desktop-menu {
   position: fixed;
-  bottom: 15px;
-  width: 100%;
-  height: 50px;
+  top: 0;
+  left: 0;
+  width: 20%;
+  height: 100%;
+  z-index: 99;
+
+  @media (max-width: $media-pc) {
+    display: none;
+  }
 
   &__wrapper {
-    width: 85%;
+    width: 80px;
+    max-width: 230px;
     height: 100%;
-    border-radius: 10px;
+    padding: 24px 0;
     display: flex;
     justify-content: center;
-    background-color: #121212;
-  }
+    background-color: $main-col;
+    transition: 0.3s;
 
-  &__buttons {
-    width: 90%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  &__btn {
-    width: 27px;
-    height: 27px;
-    padding: 0;
-    background-color: transparent;
-
-    &_active {
-      svg {
-        path {
-          fill: $brand-col;
-        }
+    @media (min-width: 1160px) {
+      &_active {
+        width: 100%;
+        padding: 24px;
+        justify-content: flex-start;
       }
     }
   }
 
-  @media (min-width: $media-pc) {
-    display: none;
+  &__links {
+    list-style: none;
+  }
+
+  &__link {
+    padding: 0;
+    width: 50px;
+    height: 50px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.3s;
+    cursor: pointer;
+
+    &:not(:first-child) {
+      margin-top: 15px;
+    }
+
+    &:hover {
+      background-color: #303030;
+    }
+
+    &_active {
+      background-color: $brand-col;
+
+      &:hover {
+        background-color: $brand-col;
+      }
+    }
+
+    p {
+      font-size: 0;
+      transition: 0.3s;
+    }
+  }
+
+  @media (min-width: 1160px) {
+    &__wrapper_active &__link {
+      width: 100%;
+      padding: 15px 20px;
+      justify-content: flex-start;
+      border-radius: 8px;
+
+      p {
+        margin-left: 15px;
+        font-size: 16px;
+      }
+    }
   }
 }
 </style>

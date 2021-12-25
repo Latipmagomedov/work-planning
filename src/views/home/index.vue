@@ -1,9 +1,15 @@
 <template>
   <div class="home">
     <start-screen v-if="!auth" @closeStartScreen="auth = true" />
+    <desktop-menu ref="desktopMenu" />
+    <modal-window ref="modal" />
     <div class="home__content" v-if="auth">
-      <header-search @search="search" @togglePostion="togglePostion" />
-      <banner-home class="home__banner" />
+      <main-header
+        @search="search"
+        @togglePostion="togglePostion"
+        @toggleDesktopMenu="toggleDesktopMenu"
+      />
+      <welcome-banner class="home__banner" />
       <div class="home__wrapper container">
         <h2 class="home__title">задачи</h2>
         <div
@@ -16,32 +22,38 @@
             :key="task.id"
             :task="task"
             :position="position"
+            @openTask="toggleModal('open-task')"
           />
         </div>
       </div>
-      <add-task-btn />
+      <button class="home__add-task-btn" @click="toggleModal('add-task')">
+        <span>+</span>
+        <p>Создать задачу</p>
+      </button>
       <nav-menu />
     </div>
   </div>
 </template>
 
 <script>
-import BannerHome from "@/components/banner";
-import HeaderSearch from "@/components/header";
 import StartScreen from "@/components/startScreen";
-import TaskCard from "@/components/card";
+import DesktopMenu from "@/components/desktopMenu";
+import ModalWindow from "@/components/modalWindow";
+import MainHeader from "@/components/mainHeader";
+import WelcomeBanner from "@/components/welcomeBanner";
+import TaskCard from "@/components/taskCard";
 import NavMenu from "@/components/navMenu";
-import AddTaskBtn from "@/components/addTaskBtn";
 
 export default {
   name: "Home",
   components: {
-    BannerHome,
-    HeaderSearch,
     StartScreen,
+    DesktopMenu,
+    ModalWindow,
+    MainHeader,
+    WelcomeBanner,
     TaskCard,
     NavMenu,
-    AddTaskBtn
   },
   data() {
     return {
@@ -132,6 +144,11 @@ export default {
       ],
     };
   },
+  watch: {
+    date() {
+      console.log(this.date);
+    },
+  },
   mounted() {
     if (localStorage.auth) {
       this.auth = true;
@@ -152,6 +169,12 @@ export default {
     togglePostion(position) {
       this.position = position;
     },
+    toggleDesktopMenu() {
+      this.$refs.desktopMenu.toggleMenu();
+    },
+    toggleModal(name) {
+      this.$refs.modal.toggle(name);
+    },
   },
 };
 </script>
@@ -163,8 +186,9 @@ export default {
   }
 
   &__title {
-    margin-top: 13px;
-    font-size: 25px;
+    margin-top: 15px;
+    margin-left: 5px;
+    font-size: 20px;
   }
 
   &__tasks {
@@ -178,6 +202,41 @@ export default {
 
   &__tasks_col {
     flex-direction: column;
+  }
+
+  &__add-task-btn {
+    position: fixed;
+    right: 10%;
+    bottom: 80px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50px;
+
+    span {
+      display: block;
+      font-size: 40px;
+      line-height: 0;
+    }
+
+    p {
+      display: none;
+    }
+
+    @media (min-width: $media-pc) {
+      left: 50%;
+      right: auto;
+      bottom: 20px;
+      transform: translate(-50%);
+      width: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      p {
+        display: block;
+        margin-left: 10px;
+      }
+    }
   }
 }
 </style>

@@ -2,6 +2,11 @@
   <header class="header">
     <div class="container">
       <div class="header__search">
+        <div class="header__burger" @click="$emit('toggleDesktopMenu')">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
         <img
           src="@/assets/images/icons/search.svg"
           class="header__search-icon"
@@ -36,7 +41,7 @@
 
 <script>
 export default {
-  name: "Header",
+  name: "MainHeader",
   data() {
     return {
       position: "grid",
@@ -74,6 +79,28 @@ export default {
     justify-content: space-between;
     background-color: $main-col;
     border-radius: 13px;
+  }
+
+  &__burger {
+    margin-right: 15px;
+    width: 25px;
+    height: 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    cursor: pointer;
+
+    span {
+      display: block;
+      width: 100%;
+      height: 2px;
+      border-radius: 0px;
+      background-color: #fff;
+    }
+
+    @media (max-width: 1160px) {
+      display: none;
+    }
   }
 
   &__search-icon {

@@ -5,6 +5,7 @@
       card_completed: task.completed,
       card_column: position == 'column',
     }"
+    @click="$emit('openTask')"
   >
     <p class="card__date">{{ task.dateCreation }} | {{ task.timeCreation }}</p>
     <h3 class="card__title">{{ task.title }}</h3>
@@ -24,6 +25,7 @@
 
 <script>
 export default {
+  name: "TaskCard",
   props: {
     task: {
       type: Object,
@@ -72,12 +74,12 @@ export default {
 
   &__title {
     margin-top: 2px;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 700;
   }
 
   &__tasks {
-    margin-top: 9px;
+    margin-top: 7px;
     display: flex;
     flex-direction: column;
     list-style: none;

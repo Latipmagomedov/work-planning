@@ -79,4 +79,20 @@ img {
   padding: 0 13px;
   margin: 0 auto;
 }
+
+// Effects
+.slide-fade-enter-active {
+  transition: all 0.3s ease;
+}
+.slide-fade-leave-active {
+  transition: all 0.2s;
+}
+.slide-fade-enter {
+  transform: translateX(100%);
+}
+
+.slide-fade-leave-to {
+  transform: translateX(-100%);
+}
+
 </style>
