@@ -90,9 +90,16 @@ img {
 .slide-fade-enter {
   transform: translateX(100%);
 }
-
 .slide-fade-leave-to {
   transform: translateX(-100%);
 }
 
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s;
+}
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
 </style>

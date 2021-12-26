@@ -65,7 +65,6 @@ export default {
           show: true,
           completed: false,
           dateCreation: "28.12.2021",
-          timeCreation: "17:00",
           deadline: new Date(),
           title: "Разработка SPA",
           subtasks: [
@@ -100,7 +99,6 @@ export default {
           show: true,
           completed: false,
           dateCreation: "28.12.2021",
-          timeCreation: "17:00",
           deadline: new Date(),
           title: "Дизайн",
           subtasks: [
@@ -123,7 +121,6 @@ export default {
           show: true,
           completed: false,
           dateCreation: "28.12.2021",
-          timeCreation: "17:00",
           deadline: new Date(),
           title: "Приложение",
           subtasks: [
@@ -143,11 +140,6 @@ export default {
         },
       ],
     };
-  },
-  watch: {
-    date() {
-      console.log(this.date);
-    },
   },
   mounted() {
     if (localStorage.auth) {

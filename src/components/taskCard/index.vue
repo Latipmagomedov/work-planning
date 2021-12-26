@@ -7,7 +7,7 @@
     }"
     @click="$emit('openTask')"
   >
-    <p class="card__date">{{ task.dateCreation }} | {{ task.timeCreation }}</p>
+    <p class="card__date">{{ task.dateCreation }}</p>
     <h3 class="card__title">{{ task.title }}</h3>
     <ul class="card__tasks">
       <li
