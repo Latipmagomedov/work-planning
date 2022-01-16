@@ -1,35 +1,24 @@
 <template>
-  <transition name="slide-fade">
-    <div class="modal-window" v-if="open">
-      <div class="container">
-        <div class="modal-window__header">
-          <div class="modal-window__back" @click="toggle">
-            <img src="@/assets/images/icons/arrow-left.svg" alt="arrow" />
-          </div>
-          <p class="modal-window__title">Задача</p>
-        </div>
-        <add-task v-if="modalName == 'add-task'" />
-        <open-task v-if="modalName == 'open-task'" />
-      </div>
+  <transition name="slide-fade" v-if="$store.getters.modalName">
+    <div class="modal-window">
+      <div class="container"></div>
     </div>
   </transition>
 </template>
 
 <script>
-import AddTask from "@/components/modalWindow/modalBodies/addTask";
-import OpenTask from "@/components/modalWindow/modalBodies/openTask";
-
 export default {
-  name: "ModalWindow",
-  components: {
-    AddTask,
-    OpenTask,
-  },
+  name: "fullModalWindow",
   data() {
     return {
       open: false,
       modalName: "",
     };
+  },
+  computed: {
+    name() {
+      return this.$store.getters.modalName
+    }
   },
   methods: {
     toggle(name) {
@@ -48,7 +37,7 @@ export default {
   width: 100%;
   height: 100%;
   background-color: $bg-col;
-  z-index: 99;
+  z-index: 990;
 
   &__header {
     width: 100%;

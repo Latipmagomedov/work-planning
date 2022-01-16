@@ -1,0 +1,324 @@
+<template>
+  <div class="sign container">
+    <pop-up-message ref="message"/>
+    <div class="sign__content">
+      <div class="sign__bottom">
+        <h2 class="sign__title">
+          {{ formType === "register" ? "Регистрация" : "Вход" }}
+        </h2>
+        <div class="sign__form">
+          <div
+              class="sign__inp"
+              :class="{
+              sign__inp_error:
+                $v.form.name.$dirty &&
+                (!$v.form.name.required || !$v.form.name.minLength),
+            }"
+          >
+            <input
+                type="text"
+                id="name"
+                autocomplete="off"
+                placeholder="Ваш логин"
+                v-model="form.name"
+            />
+            <label
+                for="name"
+                class="sign__label"
+                v-if="$v.form.name.$dirty && !$v.form.name.required"
+            >Это обязательное поле</label
+            >
+            <label
+                for="name"
+                class="sign__label"
+                v-if="$v.form.name.$dirty && !$v.form.name.minLength"
+            >Минимальное количество символов 4</label
+            >
+          </div>
+          <div
+              class="sign__inp"
+              :class="{
+              sign__inp_error:
+                $v.form.name.$dirty &&
+                (!$v.form.password.required || !$v.form.password.minLength),
+            }"
+          >
+            <input
+                type="password"
+                placeholder="Пароль"
+                v-model="form.password"
+            />
+            <label
+                for="name"
+                class="sign__label"
+                v-if="$v.form.password.$dirty && !$v.form.password.required"
+            >Это обязательное поле</label
+            >
+            <label
+                for="name"
+                class="sign__label"
+                v-if="$v.form.password.$dirty && !$v.form.password.minLength"
+            >Минимальное количество символов 8</label
+            >
+          </div>
+          <div
+              class="sign__inp"
+              :class="{
+              sign__inp_error:
+                $v.form.name.$dirty &&
+                (!$v.form.confirmPassword.required ||
+                  !$v.form.confirmPassword.minLength ||
+                  !$v.form.confirmPassword.sameAsPassword),
+            }"
+              v-if="formType === 'register'"
+          >
+            <input
+                type="password"
+                placeholder="Повторите пароль"
+                v-model="form.confirmPassword"
+            />
+            <label
+                for="name"
+                class="sign__label"
+                v-if="
+                $v.form.confirmPassword.$dirty &&
+                !$v.form.confirmPassword.required
+              "
+            >Это обязательное поле</label
+            >
+            <label
+                for="name"
+                class="sign__label"
+                v-if="
+                $v.form.confirmPassword.$dirty &&
+                !$v.form.confirmPassword.minLength
+              "
+            >Минимальное количество символов 8</label
+            >
+            <label
+                for="name"
+                class="sign__label"
+                v-if="
+                $v.form.confirmPassword.$dirty &&
+                $v.form.confirmPassword.minLength &&
+                $v.form.confirmPassword.required &&
+                !$v.form.confirmPassword.sameAsPassword
+              "
+            >Пароли не совпадают</label
+            >
+          </div>
+
+          <div class="sign__toggle" @click="toggleForm">
+            {{
+              formType === "register"
+                  ? "У меня уже есть аккаунт"
+                  : "У меня нет аккаунта"
+            }}
+          </div>
+
+          <button class="sign__btn" @click="next">Продолжить</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import {required, minLength, sameAs} from "vuelidate/lib/validators";
+import PopUpMessage from "@/components/popUpMessage";
+
+export default {
+  components: {
+    PopUpMessage
+  },
+  data() {
+    return {
+      formType: "register",
+      form: {
+        name: "",
+        password: "",
+        confirmPassword: "",
+      },
+    };
+  },
+  validations() {
+    if (this.formType === "register") {
+      return {
+        form: {
+          name: {
+            required,
+            minLength: minLength(4),
+          },
+          password: {
+            required,
+            minLength: minLength(8),
+          },
+          confirmPassword: {
+            required,
+            minLength: minLength(8),
+            sameAsPassword: sameAs("password"),
+          },
+        },
+      };
+    } else {
+      return {
+        form: {
+          name: {
+            required,
+            minLength: minLength(4),
+          },
+          password: {
+            required,
+            minLength: minLength(8),
+          },
+        },
+      };
+    }
+  },
+  methods: {
+    next() {
+      if (this.$v.$invalid) {
+        this.$v.$touch();
+        return;
+      }
+      if (this.formType === "register") {
+        this.register();
+      } else {
+        this.login();
+      }
+    },
+    async register() {
+      try {
+        const body = {
+          username: this.form.name,
+          password: this.form.password,
+        };
+        const response = await this.$auth.signUp(body);
+        if (response.statusText === "OK") {
+          this.toggleForm();
+        } else {
+          this.$refs.message.open("Ошибка", response.data.message, 3000);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    async login() {
+      try {
+        const body = {
+          username: this.form.name,
+          password: this.form.password
+        };
+        const response = await this.$auth.signIn(body);
+        if (response.statusText === "OK") {
+          this.$store.dispatch("user/login", response.data.token);
+          console.log(response)
+          this.$router.push('/');
+        } else {
+          this.$refs.message.open("Ошибка", response.data.message, 3000);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    toggleForm() {
+      if (this.formType === "register") {
+        this.formType = "login";
+      } else {
+        this.formType = "register";
+      }
+    },
+  },
+};
+</script>
+
+<style lang="scss" scoped>
+$pc-version: 480px;
+.sign {
+  width: 100%;
+  max-width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+
+  &__content {
+    height: 100%;
+    width: 100%;
+    max-width: 380px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    @media (min-width: $pc-version) {
+      width: 100%;
+      max-width: 900px;
+      height: 100%;
+      padding-bottom: 100px;
+      justify-content: center;
+    }
+  }
+
+  &__bottom {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    @media (min-width: $pc-version) {
+      max-width: 450px;
+    }
+  }
+
+  &__title {
+    font-size: 20px;
+  }
+
+  &__form {
+    margin-top: 15px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__inp {
+    width: 100%;
+
+    &:not(:first-child) {
+      margin-top: 7px;
+    }
+
+    input {
+      width: 100%;
+    }
+
+    &_error input {
+      border: 1px solid $error;
+    }
+  }
+
+  &__label {
+    display: block;
+    margin-top: 3px;
+    margin-bottom: 3px;
+    margin-left: 3px;
+    color: $error;
+    font-size: 10px;
+  }
+
+  &__btn {
+    margin-top: 20px;
+    width: 170px;
+    height: 50px;
+    border-radius: 13px;
+    font-size: 16px;
+  }
+
+  &__toggle {
+    margin-top: 7px;
+    color: $brand-col;
+    font-size: 13px;
+    cursor: pointer;
+  }
+}
+</style>

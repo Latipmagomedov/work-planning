@@ -1,8 +1,25 @@
 <template>
   <div id="app">
-    <router-view />
+    <full-modal-window/>
+    <router-view/>
   </div>
 </template>
+<script>
+import FullModalWindow from "@/components/fullModalWindow";
+
+export default {
+  components: {
+    FullModalWindow,
+  },
+  created() {
+    if (localStorage.token) {
+      this.$store.dispatch("user/login", localStorage.token);
+    } else {
+      this.$router.push('/auth')
+    }
+  },
+};
+</script>
 
 <style lang="scss">
 @import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700;800&display=swap");
@@ -48,6 +65,31 @@ input {
   }
 }
 
+textarea {
+  padding-top: 10px;
+  padding-left: 15px;
+  border-radius: 8px;
+  background-color: $main-col;
+  color: $text-col;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: "Open Sans", sans-serif;
+  resize: none;
+  box-shadow: none;
+  border: none;
+  outline: none;
+
+  &::placeholder {
+    font-size: 14px;
+    font-weight: 500;
+    color: #636363;
+  }
+
+  &::-webkit-scrollbar {
+    width: 0;
+  }
+}
+
 button {
   height: 45px;
   padding: 0 10px;
@@ -80,16 +122,49 @@ img {
   margin: 0 auto;
 }
 
+.inp-error {
+  border: 1px solid $error;
+}
+
+.checkbox {
+  min-width: 17px;
+  min-height: 17px;
+  max-width: 17px;
+  max-height: 17px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #727272;
+  transition: 0.3s;
+  cursor: pointer;
+
+  span {
+    display: block;
+    width: 8px;
+    height: 8px;
+    border-radius: 100%;
+    background-color: #fff;
+  }
+
+  &_active {
+    background-color: $brand-col;
+  }
+}
+
 // Effects
 .slide-fade-enter-active {
   transition: all 0.3s ease;
 }
+
 .slide-fade-leave-active {
   transition: all 0.2s;
 }
+
 .slide-fade-enter {
   transform: translateX(100%);
 }
+
 .slide-fade-leave-to {
   transform: translateX(-100%);
 }
@@ -98,6 +173,7 @@ img {
 .fade-leave-active {
   transition: opacity 0.3s;
 }
+
 .fade-enter,
 .fade-leave-to {
   opacity: 0;

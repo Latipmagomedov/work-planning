@@ -1,20 +1,20 @@
 <template>
   <div
-    class="card"
-    :class="{
+      class="card"
+      :class="{
       card_completed: task.completed,
       card_column: position == 'column',
     }"
-    @click="$emit('openTask')"
+      @click="$emit('openTask')"
   >
-    <p class="card__date">{{ task.dateCreation }}</p>
+    <p class="card__date">{{ task.deadline }}</p>
     <h3 class="card__title">{{ task.title }}</h3>
     <ul class="card__tasks">
       <li
-        class="card__task"
-        :class="{ card__task_completed: subtask.completed }"
-        v-for="(subtask, index) in task.subtasks"
-        :key="'subtask' + index"
+          class="card__task"
+          :class="{ card__task_completed: subtask.completed }"
+          v-for="(subtask, index) in task.subtasks"
+          :key="'subtask' + index"
       >
         {{ subtask.title }}
       </li>
@@ -51,6 +51,7 @@ export default {
   border-radius: 13px;
   background-color: $main-col;
   overflow: hidden;
+  cursor: pointer;
 
   &__shadow {
     display: block;
@@ -60,10 +61,10 @@ export default {
     width: 100%;
     height: 40%;
     background: linear-gradient(
-      to top,
-      rgba(25, 25, 25, 1),
-      rgba(25, 25, 25, 0.85),
-      rgba(25, 25, 25, 0)
+            to top,
+            rgba(25, 25, 25, 1),
+            rgba(25, 25, 25, 0.85),
+            rgba(25, 25, 25, 0)
     );
   }
 
@@ -92,6 +93,7 @@ export default {
 
   &__task {
     font-size: 12px;
+
     &:not(:first-child) {
       margin-top: 5px;
     }

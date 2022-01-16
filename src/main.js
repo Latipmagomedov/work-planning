@@ -1,18 +1,23 @@
-import Vue from 'vue'
-import App from './App.vue'
-import './registerServiceWorker'
-import router from './router'
-import store from './store'
-import Calendar from 'v-calendar/lib/components/calendar.umd'
-import DatePicker from 'v-calendar/lib/components/date-picker.umd'
+import Vue from "vue";
+import App from "./App.vue";
+import "./registerServiceWorker";
+import router from "./router";
+import store from "./store";
 
-Vue.config.productionTip = false
+import ApiPlugin from "./plugins/api";
+import Calendar from "v-calendar/lib/components/calendar.umd";
+import DatePicker from "v-calendar/lib/components/date-picker.umd";
+import Vuelidate from "vuelidate";
 
-Vue.component('calendar', Calendar)
-Vue.component('date-picker', DatePicker)
+Vue.config.productionTip = false;
+
+Vue.use(ApiPlugin);
+Vue.component("calendar", Calendar);
+Vue.component("date-picker", DatePicker);
+Vue.use(Vuelidate);
 
 new Vue({
   router,
   store,
-  render: h => h(App)
-}).$mount('#app')
+  render: (h) => h(App),
+}).$mount("#app");

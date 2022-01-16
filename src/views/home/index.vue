@@ -1,44 +1,39 @@
 <template>
   <div class="home">
-    <start-screen v-if="!auth" @closeStartScreen="auth = true" />
-    <desktop-menu ref="desktopMenu" />
-    <modal-window ref="modal" />
-    <div class="home__content" v-if="auth">
+    <div class="home__content">
+      <desktop-menu ref="desktopMenu"/>
       <main-header
-        @search="search"
-        @togglePostion="togglePostion"
-        @toggleDesktopMenu="toggleDesktopMenu"
+          @search="search = $event"
+          @togglePostion="togglePostion"
+          @toggleDesktopMenu="toggleDesktopMenu"
       />
-      <welcome-banner class="home__banner" />
+      <welcome-banner class="home__banner"/>
       <div class="home__wrapper container">
         <h2 class="home__title">задачи</h2>
         <div
-          class="home__tasks"
-          :class="{ home__tasks_col: position == 'column' }"
+            class="home__tasks"
+            :class="{ home__tasks_col: position === 'column' }"
         >
           <task-card
-            v-show="task.show"
-            v-for="task in tasks"
-            :key="task.id"
-            :task="task"
-            :position="position"
-            @openTask="toggleModal('open-task')"
+              v-for="task in allTasks"
+              :key="task.id"
+              :task="task"
+              :position="position"
+              @openTask="$router.push(`/task/${task.id}`)"
           />
         </div>
       </div>
-      <button class="home__add-task-btn" @click="toggleModal('add-task')">
+      <button class="home__add-task-btn" @click="$router.push('/create-task')">
         <span>+</span>
         <p>Создать задачу</p>
       </button>
-      <nav-menu />
+      <nav-menu/>
     </div>
   </div>
 </template>
 
 <script>
-import StartScreen from "@/components/startScreen";
 import DesktopMenu from "@/components/desktopMenu";
-import ModalWindow from "@/components/modalWindow";
 import MainHeader from "@/components/mainHeader";
 import WelcomeBanner from "@/components/welcomeBanner";
 import TaskCard from "@/components/taskCard";
@@ -47,9 +42,7 @@ import NavMenu from "@/components/navMenu";
 export default {
   name: "Home",
   components: {
-    StartScreen,
     DesktopMenu,
-    ModalWindow,
     MainHeader,
     WelcomeBanner,
     TaskCard,
@@ -59,113 +52,41 @@ export default {
     return {
       auth: false,
       position: "grid",
-      tasks: [
-        {
-          id: 1,
-          show: true,
-          completed: false,
-          dateCreation: "28.12.2021",
-          deadline: new Date(),
-          title: "Разработка SPA",
-          subtasks: [
-            {
-              completed: false,
-              title: "Тех задание",
-            },
-            {
-              completed: false,
-              title: "Дизайн",
-            },
-            {
-              completed: false,
-              title: "Разработка",
-            },
-            {
-              completed: false,
-              title: "Тех задание",
-            },
-            {
-              completed: true,
-              title: "Дизайн",
-            },
-            {
-              completed: false,
-              title: "Разработка",
-            },
-          ],
-        },
-        {
-          id: 2,
-          show: true,
-          completed: false,
-          dateCreation: "28.12.2021",
-          deadline: new Date(),
-          title: "Дизайн",
-          subtasks: [
-            {
-              completed: false,
-              title: "Тех задание",
-            },
-            {
-              completed: true,
-              title: "Дизайн",
-            },
-            {
-              completed: false,
-              title: "Разработка",
-            },
-          ],
-        },
-        {
-          id: 3,
-          show: true,
-          completed: false,
-          dateCreation: "28.12.2021",
-          deadline: new Date(),
-          title: "Приложение",
-          subtasks: [
-            {
-              completed: false,
-              title: "Тех задание",
-            },
-            {
-              completed: true,
-              title: "Дизайн",
-            },
-            {
-              completed: false,
-              title: "Разработка",
-            },
-          ],
-        },
-      ],
+      search: '',
+      tasks: [],
     };
   },
-  mounted() {
-    if (localStorage.auth) {
+  computed: {
+    allTasks() {
+      let filtration = []
+      this.tasks.forEach(item => {
+        if (item.title.toLowerCase().indexOf(this.search.toLowerCase()) >= 0) filtration.push(item)
+      });
+      return filtration
+    }
+  },
+  created() {
+    if (localStorage.token) {
       this.auth = true;
+      this.getTasks()
     } else {
       this.auth = false;
     }
   },
   methods: {
-    search(value) {
-      this.tasks.forEach((item, index) => {
-        if (item.title.toLowerCase().indexOf(value.toLowerCase()) < 0) {
-          item.show = false;
-        } else {
-          item.show = true;
-        }
-      });
+    async getTasks() {
+      const headers = {
+        'Authorization': `Bearer ${this.$store.getters.token}`,
+      }
+      const response = await this.$task.getTasks(headers);
+      this.tasks = response.data
+      console.log(response.data)
     },
     togglePostion(position) {
       this.position = position;
     },
     toggleDesktopMenu() {
       this.$refs.desktopMenu.toggleMenu();
-    },
-    toggleModal(name) {
-      this.$refs.modal.toggle(name);
     },
   },
 };
@@ -186,7 +107,7 @@ export default {
   &__tasks {
     margin-top: 0;
     margin-left: -2%;
-    padding-bottom: 15px;
+    padding-bottom: 85px;
     width: 100%;
     display: flex;
     flex-wrap: wrap;

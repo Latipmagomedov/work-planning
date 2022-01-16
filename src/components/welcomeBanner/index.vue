@@ -2,9 +2,7 @@
   <div class="banner container">
     <div class="banner__content">
       <div class="banner__left">
-        <h1 class="banner__hi">
-          Hi, {{ user ? `${user.name} ${user.surname}` : "User" }}
-        </h1>
+        <h1 class="banner__hi">Hi, {{ userName }}</h1>
         <div class="banner__date-time">
           <p class="banner__time">{{ fullTime }}</p>
           <p class="banner__date">{{ fullDate }}</p>
@@ -26,12 +24,14 @@ export default {
     return {
       fullDate: "",
       fullTime: "",
-      user: "",
+      userName: "",
     };
+  },
+  created() {
+    this.getUser();
   },
   mounted() {
     if (localStorage.user) this.user = JSON.parse(localStorage.user);
-
     this.date();
     setInterval(this.date, 1000);
   },
@@ -41,18 +41,30 @@ export default {
 
       const year = date.getFullYear();
       const month =
-        date.getMonth() + 1 < 10
-          ? "0" + Number(date.getMonth() + 1)
-          : date.getMonth() + 1;
+          date.getMonth() + 1 < 10
+              ? "0" + Number(date.getMonth() + 1)
+              : date.getMonth() + 1;
       const day = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
 
       const hours =
-        date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
+          date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
       const minutes =
-        date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
+          date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
 
       this.fullDate = `${day}.${month}.${year}`;
       this.fullTime = `${hours}:${minutes}`;
+    },
+    async getUser() {
+      const headers = {
+        'Authorization': `Bearer ${this.$store.getters.token}`,
+      }
+
+      try {
+        const response = await this.$auth.getProfile(headers);
+        this.userName = response.data.username
+      } catch (error) {
+        console.log(error)
+      }
     },
   },
 };
@@ -75,15 +87,18 @@ export default {
     flex-direction: column;
     justify-content: space-between;
   }
+
   &__hi {
-    max-width: 60%;
+    width: 170px;
     font-size: 23px;
     line-height: 1;
   }
+
   &__time {
     font-size: 23px;
     font-weight: 700;
   }
+
   &__date {
     font-size: 12px;
     font-weight: 600;
@@ -94,10 +109,12 @@ export default {
     align-items: center;
     flex-direction: column;
   }
+
   &__tasks-number {
     font-size: 27px;
     line-height: 1;
   }
+
   &__tasks-text {
     font-size: 13px;
   }
