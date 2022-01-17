@@ -95,21 +95,7 @@ export default {
   },
   computed: {
     getSelectedDate() {
-      const date = this.task.deadline;
-      const fullDate = `${
-          date.getDate() < 10 ? "0" + date.getDate() : date.getDate()
-      }.${
-          Number(1 + date.getMonth()) < 10
-              ? "0" + Number(1 + date.getMonth())
-              : Number(1 + date.getMonth())
-      }.${date.getFullYear()}`;
-      const fullTime = `${
-          date.getHours() < 10 ? "0" + date.getHours() : date.getHours()
-      }:${
-          date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes()
-      }`;
-
-      return `${fullDate} ${fullTime}`;
+      return this.task.deadline.toLocaleString()
     },
   },
   methods: {
@@ -132,8 +118,8 @@ export default {
         title: this.task.title,
         description: this.task.description,
         completed: this.task.completed,
-        deadline: new Date(this.task.deadline),
-        subtasks: this.task.subtasks[0].title ? this.task.subtasks : []
+        deadline: this.task.deadline,
+        subtasks: this.task.subtasks[0] && this.task.subtasks[0].title ? this.task.subtasks : []
       }]
 
       const headers = {
@@ -169,6 +155,7 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    user-select: none;
   }
 
   &__back {

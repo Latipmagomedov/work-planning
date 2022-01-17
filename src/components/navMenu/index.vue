@@ -5,7 +5,7 @@
         <router-link
           tag="button"
           to="/"
-          active-class="nav-menu__btn_active"
+          exact-active-class="nav-menu__btn_active"
           class="nav-menu__btn"
         >
           <svg
@@ -24,7 +24,7 @@
         <router-link
           tag="button"
           to="/favorites"
-          active-class="nav-menu__btn_active"
+          exact-active-class="nav-menu__btn_active"
           class="nav-menu__btn"
         >
           <svg
@@ -43,7 +43,7 @@
         <router-link
           tag="button"
           to="/profile"
-          active-class="nav-menu__btn_active"
+          exact-active-class="nav-menu__btn_active"
           class="nav-menu__btn"
         >
           <svg
@@ -104,6 +104,9 @@ export default {
     &_active {
       svg {
         path {
+          fill: $brand-col;
+        }
+        circle {
           fill: $brand-col;
         }
       }

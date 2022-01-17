@@ -7,19 +7,25 @@
           @togglePostion="togglePostion"
           @toggleDesktopMenu="toggleDesktopMenu"
       />
-      <welcome-banner class="home__banner"/>
+      <welcome-banner class="home__banner" :length="tasks.length"/>
       <div class="home__wrapper container">
-        <h2 class="home__title">задачи</h2>
-        <div
-            class="home__tasks"
-            :class="{ home__tasks_col: position === 'column' }"
+        <h2 class="home__title"
+            :class="{'home__title_empty': !tasks.length && onload}">{{
+            tasks.length ? 'Задачи' : 'Задач пока нет ('
+          }}</h2>
+        <div class="home__tasks"
+             :class="{ home__tasks_col: position === 'column' }"
         >
-          <task-card
-              v-for="task in allTasks"
-              :key="task.id"
-              :task="task"
-              :position="position"
-              @openTask="$router.push(`/task/${task.id}`)"
+          <skeleton-card v-if="!onload"
+                         v-for="item in 30"
+                         :key="item"
+                         :position="position"/>
+          <task-card v-if="onload"
+                     v-for="task in allTasks"
+                     :key="task.id"
+                     :task="task"
+                     :position="position"
+                     @openTask="$router.push(`/task/${task.id}`)"
           />
         </div>
       </div>
@@ -37,6 +43,7 @@ import DesktopMenu from "@/components/desktopMenu";
 import MainHeader from "@/components/mainHeader";
 import WelcomeBanner from "@/components/welcomeBanner";
 import TaskCard from "@/components/taskCard";
+import SkeletonCard from "@/components/skeletonCard";
 import NavMenu from "@/components/navMenu";
 
 export default {
@@ -46,13 +53,14 @@ export default {
     MainHeader,
     WelcomeBanner,
     TaskCard,
+    SkeletonCard,
     NavMenu,
   },
   data() {
     return {
-      auth: false,
       position: "grid",
       search: '',
+      onload: false,
       tasks: [],
     };
   },
@@ -66,12 +74,7 @@ export default {
     }
   },
   created() {
-    if (localStorage.token) {
-      this.auth = true;
-      this.getTasks()
-    } else {
-      this.auth = false;
-    }
+    if (this.$store.getters.token) this.getTasks()
   },
   methods: {
     async getTasks() {
@@ -80,7 +83,7 @@ export default {
       }
       const response = await this.$task.getTasks(headers);
       this.tasks = response.data
-      console.log(response.data)
+      if (response.data) this.onload = true
     },
     togglePostion(position) {
       this.position = position;
@@ -102,6 +105,12 @@ export default {
     margin-top: 15px;
     margin-left: 5px;
     font-size: 20px;
+
+    &_empty {
+      margin-top: 18vh;
+      color: #4d4d4d;
+      text-align: center;
+    }
   }
 
   &__tasks {

@@ -2,7 +2,7 @@
   <div class="banner container">
     <div class="banner__content">
       <div class="banner__left">
-        <h1 class="banner__hi">Hi, {{ userName }}</h1>
+        <h1 class="banner__hi">Hi, {{ userName ? userName : 'user' }}</h1>
         <div class="banner__date-time">
           <p class="banner__time">{{ fullTime }}</p>
           <p class="banner__date">{{ fullDate }}</p>
@@ -10,7 +10,7 @@
       </div>
 
       <div class="banner__right">
-        <h2 class="banner__tasks-number">10</h2>
+        <h2 class="banner__tasks-number">{{length}}</h2>
         <p class="banner__tasks-text">Задач</p>
       </div>
     </div>
@@ -20,6 +20,12 @@
 <script>
 export default {
   name: "WelcomeBanner",
+  props: {
+    length: {
+      type: Number,
+      required: false
+    }
+  },
   data() {
     return {
       fullDate: "",
@@ -72,6 +78,7 @@ export default {
 
 <style lang="scss" scoped>
 .banner {
+  user-select: none;
   &__content {
     height: 150px;
     padding: 13px 15px;

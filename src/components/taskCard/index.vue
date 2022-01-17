@@ -1,18 +1,17 @@
 <template>
-  <div
-      class="card"
-      :class="{
-      card_completed: task.completed,
-      card_column: position == 'column',
+  <div class="card"
+       :class="{
+      'card_completed': task.completed,
+      'card_column': position === 'column',
     }"
-      @click="$emit('openTask')"
+       @click="$emit('openTask')"
   >
-    <p class="card__date">{{ task.deadline }}</p>
+    <p class="card__date">{{ date }}</p>
     <h3 class="card__title">{{ task.title }}</h3>
-    <ul class="card__tasks">
+    <ul class="card__tasks" v-if="task.subtasks">
       <li
           class="card__task"
-          :class="{ card__task_completed: subtask.completed }"
+          :class="{ 'card__task_completed': subtask.completed }"
           v-for="(subtask, index) in task.subtasks"
           :key="'subtask' + index"
       >
@@ -36,6 +35,13 @@ export default {
       required: false,
     },
   },
+  computed: {
+    date() {
+      if (!this.task.deadline) return
+      const date = new Date(this.task.deadline).toLocaleString()
+      return date
+    }
+  }
 };
 </script>
 
@@ -51,6 +57,7 @@ export default {
   border-radius: 13px;
   background-color: $main-col;
   overflow: hidden;
+  user-select: none;
   cursor: pointer;
 
   &__shadow {

@@ -1,5 +1,5 @@
 <template>
-  <div class="task">
+  <div class="task" v-if="onload">
     <div class="container">
       <div class="task__header">
         <div class="task__back" @click="$router.push('/')">
@@ -15,7 +15,7 @@
           </div>
           <h1 class="task__title">{{ task.title }}</h1>
         </div>
-        <p class="task__deadline">{{ task.deadline }}</p>
+        <p class="task__deadline">{{ date }}</p>
         <p class="task__description" v-if="task.description">{{ task.description }}</p>
         <ul class="task__subtasks" v-if="task.subtasks">
           <li class="task__subtask"
@@ -38,30 +38,41 @@
 export default {
   data() {
     return {
+      onload: false,
       taskId: null,
       task: {}
     }
   },
-  async created() {
-    this.taskId = this.$route.params.id
-    const headers = {
-      'Authorization': `Bearer ${this.$store.getters.token}`,
-    }
-
-    try {
-      const response = await this.$task.getTask(this.taskId, headers);
-      this.task = response.data[0]
-      console.log(response.data[0])
-    } catch (error) {
-      console.log(error)
+  computed: {
+    date() {
+      if (!this.task.deadline) return
+      const date = new Date(this.task.deadline).toLocaleString()
+      return date
     }
   },
+  async created() {
+    this.getTask()
+  },
   methods: {
-    async deleteTask() {
+    async getTask() {
+      this.taskId = this.$route.params.id
       const headers = {
         'Authorization': `Bearer ${this.$store.getters.token}`,
       }
 
+      try {
+        const response = await this.$task.getTask(this.taskId, headers);
+        this.task = response.data[0]
+        if (response.data) this.onload = true
+        console.log(response.data[0])
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    async deleteTask() {
+      const headers = {
+        'Authorization': `Bearer ${this.$store.getters.token}`,
+      }
       try {
         const response = await this.$task.deleteTask(this.taskId, headers);
         this.$router.push('/')
@@ -74,7 +85,6 @@ export default {
       const headers = {
         'Authorization': `Bearer ${this.$store.getters.token}`,
       }
-
       try {
         const response = await this.$task.updateTask(this.task, headers);
         console.log(response)
@@ -114,6 +124,7 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    user-select: none;
   }
 
   &__back {

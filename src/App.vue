@@ -103,6 +103,7 @@ button {
   box-shadow: none;
   border: none;
   outline: none;
+  user-select: none;
   transition: 0.3s;
   cursor: pointer;
 

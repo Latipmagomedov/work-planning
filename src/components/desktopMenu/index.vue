@@ -9,7 +9,7 @@
           tag="li"
           to="/"
           class="desktop-menu__link"
-          active-class="desktop-menu__link_active"
+          exact-active-class="desktop-menu__link_active"
         >
           <svg
             width="24"
@@ -29,7 +29,7 @@
           tag="li"
           to="/favorites"
           class="desktop-menu__link"
-          active-class="desktop-menu__link_active"
+          exact-active-class="desktop-menu__link_active"
         >
           <svg
             width="24"
@@ -49,7 +49,7 @@
           tag="li"
           to="/profile"
           class="desktop-menu__link"
-          active-class="desktop-menu__link_active"
+          exact-active-class="desktop-menu__link_active"
         >
           <svg
             width="24"
@@ -96,6 +96,7 @@ export default {
   width: 20%;
   height: 100%;
   z-index: 99;
+  user-select: none;
 
   @media (max-width: $media-pc) {
     display: none;
