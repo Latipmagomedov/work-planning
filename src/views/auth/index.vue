@@ -187,8 +187,8 @@ export default {
         this.login();
       }
     },
-    async register() {
-      try {
+    register() {
+      this.$load(async () => {
         const body = {
           username: this.form.name,
           password: this.form.password,
@@ -199,12 +199,10 @@ export default {
         } else {
           this.$refs.message.open("Ошибка", response.data.message, 3000);
         }
-      } catch (err) {
-        console.log(err);
-      }
+      })
     },
-    async login() {
-      try {
+    login() {
+      this.$load(async () => {
         const body = {
           username: this.form.name,
           password: this.form.password
@@ -217,9 +215,7 @@ export default {
         } else {
           this.$refs.message.open("Ошибка", response.data.message, 3000);
         }
-      } catch (error) {
-        console.log(error);
-      }
+      })
     },
     toggleForm() {
       if (this.formType === "register") {

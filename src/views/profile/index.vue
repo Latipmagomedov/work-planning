@@ -32,17 +32,15 @@ export default {
     this.getUser()
   },
   methods: {
-    async getUser() {
+    getUser() {
       const headers = {
         'Authorization': `Bearer ${this.$store.getters.token}`,
       }
-      try {
+
+      this.$load(async () => {
         const response = await this.$auth.getProfile(headers);
         this.user = response.data
-        console.log(response.data)
-      } catch (error) {
-        console.log(error)
-      }
+      })
     },
     logout() {
       this.$store.dispatch("user/logout");

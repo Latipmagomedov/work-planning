@@ -61,40 +61,34 @@ export default {
     this.getTask()
   },
   methods: {
-    async getTask() {
+    getTask() {
       this.taskId = this.$route.params.id
       const headers = {
         'Authorization': `Bearer ${this.$store.getters.token}`,
       }
-
-      try {
+      this.$load(async () => {
         const response = await this.$task.getTask(this.taskId, headers);
         this.task = response.data[0]
         if (response.data) this.onload = true
-      } catch (error) {
-        console.log(error)
-      }
+      })
     },
     async deleteTask() {
       const headers = {
         'Authorization': `Bearer ${this.$store.getters.token}`,
       }
-      try {
+      this.$load(async () => {
         const response = await this.$task.deleteTask(this.taskId, headers);
         this.$router.push('/')
-      } catch (error) {
-        console.log(error)
-      }
+      })
     },
     async updateTask() {
       const headers = {
         'Authorization': `Bearer ${this.$store.getters.token}`,
       }
-      try {
+
+      this.$load(async () => {
         const response = await this.$task.updateTask(this.task, headers);
-      } catch (error) {
-        console.log(error)
-      }
+      })
     },
     completedTask() {
       this.task.completed = !this.task.completed

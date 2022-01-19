@@ -78,13 +78,15 @@ export default {
     if (this.$store.getters.token) this.getTasks()
   },
   methods: {
-    async getTasks() {
+    getTasks() {
       const headers = {
         'Authorization': `Bearer ${this.$store.getters.token}`,
       }
-      const response = await this.$task.getTasks(headers);
-      this.tasks = response.data
-      if (response.data) this.onload = true
+      this.$load(async () => {
+        const response = await this.$task.getTasks(headers);
+        this.tasks = response.data
+        if (response.data) this.onload = true
+      })
     },
     togglePostion(position) {
       this.position = position;

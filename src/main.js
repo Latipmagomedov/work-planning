@@ -5,6 +5,7 @@ import router from "./router";
 import store from "./store";
 
 import ApiPlugin from "./plugins/api";
+import LoadPlugin from "./plugins/load";
 import Calendar from "v-calendar/lib/components/calendar.umd";
 import DatePicker from "v-calendar/lib/components/date-picker.umd";
 import Vuelidate from "vuelidate";
@@ -12,6 +13,7 @@ import Vuelidate from "vuelidate";
 Vue.config.productionTip = false;
 
 Vue.use(ApiPlugin);
+Vue.use(LoadPlugin);
 Vue.component("calendar", Calendar);
 Vue.component("date-picker", DatePicker);
 Vue.use(Vuelidate);

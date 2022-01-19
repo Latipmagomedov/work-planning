@@ -115,7 +115,7 @@ export default {
     removeTask(index) {
       this.task.subtasks.splice(index, 1)
     },
-    async addTasks() {
+    addTasks() {
       if (this.$v.$invalid) {
         this.$v.$touch();
         return;
@@ -134,7 +134,8 @@ export default {
       const headers = {
         'Authorization': `Bearer ${this.$store.getters.token}`,
       }
-      try {
+
+      this.$load(async () => {
         const response = await this.$task.createTask(body, headers);
 
         if (response.statusText === "OK") {
@@ -143,10 +144,7 @@ export default {
           this.$refs.message.open("Ошибка", response.data.message, 3000);
           this.disbledBtn = false
         }
-      } catch (error) {
-        console.log(error)
-        this.disbledBtn = false
-      }
+      })
     },
   },
 };
