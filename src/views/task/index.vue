@@ -1,5 +1,5 @@
 <template>
-  <div class="task" v-if="onload">
+  <div class="task" :class="{'task_skeleton': !onload}">
     <div class="container">
       <div class="task__header">
         <div class="task__back" @click="$router.push('/')">
@@ -8,17 +8,20 @@
         <p class="task__header-title" @click="deleteTask">Удалить</p>
       </div>
       <div class="task__wrapper">
-        <div class="task__wrapper-header" @click="completedTask">
+        <div class="task__wrapper-header"
+             @click="completedTask">
           <div class="checkbox"
-               :class="{'checkbox_active': task.completed}">
+               :class="{'checkbox_active': task.completed}"
+               v-if="onload">
             <span></span>
           </div>
           <h1 class="task__title">{{ task.title }}</h1>
         </div>
         <p class="task__deadline">{{ date }}</p>
         <p class="task__description" v-if="task.description">{{ task.description }}</p>
-        <ul class="task__subtasks" v-if="task.subtasks">
+        <ul class="task__subtasks">
           <li class="task__subtask"
+              v-if="onload"
               v-for="(subtask, index) in task.subtasks"
               :key="subtask.id"
               @click="completedSubtask(index)">
@@ -28,6 +31,10 @@
             </div>
             <p class="task__subtask-title">{{ subtask.title }}</p>
           </li>
+          <li class="task__subtask"
+              v-if="!onload"
+              v-for="item in 14"
+              :key="item"></li>
         </ul>
       </div>
     </div>
@@ -64,7 +71,6 @@ export default {
         const response = await this.$task.getTask(this.taskId, headers);
         this.task = response.data[0]
         if (response.data) this.onload = true
-        console.log(response.data[0])
       } catch (error) {
         console.log(error)
       }
@@ -76,7 +82,6 @@ export default {
       try {
         const response = await this.$task.deleteTask(this.taskId, headers);
         this.$router.push('/')
-        console.log(response)
       } catch (error) {
         console.log(error)
       }
@@ -87,7 +92,6 @@ export default {
       }
       try {
         const response = await this.$task.updateTask(this.task, headers);
-        console.log(response)
       } catch (error) {
         console.log(error)
       }
@@ -153,11 +157,29 @@ export default {
     font-size: 26px;
   }
 
+  &_skeleton &__title {
+    width: 80%;
+    height: 30px;
+    margin-top: 3px;
+    margin-left: 0px;
+    border-radius: 6px;
+    background-color: $skeleton-col;
+    line-height: 1;
+  }
+
   &__deadline {
     margin-top: 5px;
     font-size: 16px;
     font-weight: 600;
     color: rgba(150, 149, 149, 0.99);
+  }
+
+  &_skeleton &__deadline {
+    width: 35%;
+    height: 17px;
+    margin-top: 8px;
+    border-radius: 3px;
+    background-color: $skeleton-col;
   }
 
   &__description {
@@ -178,6 +200,17 @@ export default {
 
     &:not(:first-child) {
       margin-top: 10px;
+    }
+  }
+
+  &_skeleton &__subtask {
+    width: 65%;
+    height: 20px;
+    border-radius: 4px;
+    background-color: $skeleton-col;
+
+    &:nth-child(even) {
+      width: 40%;
     }
   }
 

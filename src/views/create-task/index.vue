@@ -53,9 +53,15 @@
               <img src="@/assets/images/icons/x.svg" alt="remove">
             </div>
           </div>
-          <button class="add-task__subtasks-add" @click="addSubtask"><span>+</span> Добавить подзадачу</button>
+          <button class="add-task__subtasks-add"
+                  @click="addSubtask">
+            <span>+</span> Добавить подзадачу
+          </button>
         </div>
-        <button class="add-task__add" @click="addTasks">Добавить задачу</button>
+        <button class="add-task__add"
+                @click="addTasks"
+                :disabled="disbledBtn">Добавить задачу
+        </button>
       </div>
     </div>
   </div>
@@ -74,6 +80,7 @@ export default {
   data() {
     return {
       showDatepicker: false,
+      disbledBtn: false,
       task: {
         completed: false,
         title: '',
@@ -114,6 +121,8 @@ export default {
         return;
       }
 
+      this.disbledBtn = true
+
       const body = [{
         title: this.task.title,
         description: this.task.description,
@@ -127,16 +136,16 @@ export default {
       }
       try {
         const response = await this.$task.createTask(body, headers);
-        console.log(response)
 
         if (response.statusText === "OK") {
           this.$router.push('/')
-          this.$emit('getTasks')
         } else {
           this.$refs.message.open("Ошибка", response.data.message, 3000);
+          this.disbledBtn = false
         }
       } catch (error) {
         console.log(error)
+        this.disbledBtn = false
       }
     },
   },

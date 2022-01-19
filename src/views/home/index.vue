@@ -10,16 +10,17 @@
       <welcome-banner class="home__banner" :length="tasks.length"/>
       <div class="home__wrapper container">
         <h2 class="home__title"
-            :class="{'home__title_empty': !tasks.length && onload}">{{
-            tasks.length ? 'Задачи' : 'Задач пока нет ('
-          }}</h2>
-        <div class="home__tasks"
-             :class="{ home__tasks_col: position === 'column' }"
-        >
+            :class="{'home__title_empty': !tasks.length && onload}"
+            v-if="onload"
+        >{{ tasks.length ? 'Задачи' : 'Задач пока нет (' }}</h2>
+        <h2 class="home__title" v-if="!onload">Загрузка . . .</h2>
+
+        <div class="home__tasks" :class="{ home__tasks_col: position === 'column' }">
           <skeleton-card v-if="!onload"
                          v-for="item in 30"
                          :key="item"
                          :position="position"/>
+
           <task-card v-if="onload"
                      v-for="task in allTasks"
                      :key="task.id"
