@@ -2,12 +2,12 @@ import axios from "axios";
 import store from "../store";
 
 const api = axios.create({
-    baseURL: "https://wtm-api-v1.herokuapp.com",
+    baseURL: process.env.VUE_APP_BASE_API,
     withCredentials: true,
 });
 api.interceptors.request.use(
     async config => {
-        if (store.getters.token) config.headers['Authorization'] = 'Bearer ' + store.getters.token;
+        if (store.getters.token) config.headers['Authorization'] = `Bearer ${store.getters.token}`;
         config.headers['Content-Type'] = 'application/json';
 
         return config;
