@@ -46,60 +46,41 @@ export default {
   data() {
     return {
       onload: false,
-      taskId: null,
+      taskId: this.$route.params.id,
       task: {}
     }
   },
   computed: {
     date() {
-      if (!this.task.deadline) return
-      const date = new Date(this.task.deadline).toLocaleString()
-      return date
+      return this.task.deadline ? new Date(this.task.deadline).toLocaleString() : ''
     }
   },
-  async created() {
+  created() {
     this.getTask()
   },
   methods: {
     getTask() {
-      this.taskId = this.$route.params.id
-      const headers = {
-        'Authorization': `Bearer ${this.$store.getters.token}`,
-      }
       this.$load(async () => {
-        const response = await this.$task.getTask(this.taskId, headers);
+        const response = await this.$task.getTask(this.taskId);
         this.task = response.data[0]
-        if (response.data) this.onload = true
+        if (this.task) this.onload = true
       })
     },
-    async deleteTask() {
-      const headers = {
-        'Authorization': `Bearer ${this.$store.getters.token}`,
-      }
+    deleteTask() {
       this.$load(async () => {
-        const response = await this.$task.deleteTask(this.taskId, headers);
-        this.$router.push('/')
+        await this.$task.deleteTask(this.taskId)
+        await this.$router.push('/')
       })
     },
     async updateTask() {
-      const headers = {
-        'Authorization': `Bearer ${this.$store.getters.token}`,
-      }
-
-      this.$load(async () => {
-        const response = await this.$task.updateTask(this.task, headers);
-      })
+      this.$load(async () => await this.$task.updateTask(this.task))
     },
     completedTask() {
       this.task.completed = !this.task.completed
       if (this.task.completed === true) {
-        this.task.subtasks.forEach(item => {
-          item.completed = true
-        })
+        this.task.subtasks.forEach(item => item.completed = true)
       } else {
-        this.task.subtasks.forEach(item => {
-          item.completed = false
-        })
+        this.task.subtasks.forEach(item => item.completed = false)
       }
       this.updateTask()
     },

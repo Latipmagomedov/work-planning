@@ -68,7 +68,7 @@
 </template>
 
 <script>
-import {required, minLength, sameAs} from "vuelidate/lib/validators";
+import {required} from "vuelidate/lib/validators";
 
 import PopUpMessage from "@/components/popUpMessage";
 
@@ -107,10 +107,7 @@ export default {
   },
   methods: {
     addSubtask() {
-      this.task.subtasks.push({
-        title: '',
-        completed: false,
-      });
+      this.task.subtasks.push({title: '', completed: false});
     },
     removeTask(index) {
       this.task.subtasks.splice(index, 1)
@@ -131,15 +128,11 @@ export default {
         subtasks: this.task.subtasks[0] && this.task.subtasks[0].title ? this.task.subtasks : []
       }]
 
-      const headers = {
-        'Authorization': `Bearer ${this.$store.getters.token}`,
-      }
-
       this.$load(async () => {
-        const response = await this.$task.createTask(body, headers);
+        const response = await this.$task.createTask(body);
 
         if (response.statusText === "OK") {
-          this.$router.push('/')
+          await this.$router.push('/')
         } else {
           this.$refs.message.open("Ошибка", response.data.message, 3000);
           this.disbledBtn = false

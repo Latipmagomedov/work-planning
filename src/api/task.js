@@ -1,20 +1,20 @@
 import api from "./api";
 
 const tasks = {
-    createTask(payload, headers) {
-        return api.post("/api/task/create", payload, {headers});
+    createTask(payload) {
+        return api.post("/api/task/create", payload);
     },
-    getTasks(headers) {
-        return api.get(`/api/task/all`, {headers});
+    getTasks() {
+        return api.get(`/api/task/all`);
     },
-    getTask(id, headers) {
-        return api.get(`/api/task/${id}`, {headers});
+    getTask(id) {
+        return api.get(`/api/task/${id}`);
     },
-    updateTask(payload, headers) {
-        return api.post(`/api/task/update`, payload, {headers});
+    updateTask(payload) {
+        return api.post(`/api/task/update`, payload);
     },
-    deleteTask(id, headers) {
-        return api.post(`/api/task/delete/${id}`, {}, {headers});
+    deleteTask(id) {
+        return api.post(`/api/task/delete/${id}`);
     },
 };
 

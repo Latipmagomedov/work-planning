@@ -33,12 +33,8 @@ export default {
   },
   methods: {
     getUser() {
-      const headers = {
-        'Authorization': `Bearer ${this.$store.getters.token}`,
-      }
-
       this.$load(async () => {
-        const response = await this.$auth.getProfile(headers);
+        const response = await this.$auth.getProfile();
         this.user = response.data
       })
     },
