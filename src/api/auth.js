@@ -7,8 +7,8 @@ const auth = {
     signUp(payload) {
         return api.post("/api/account/register", payload);
     },
-    getProfile(headers) {
-        return api.get("/api/account", {headers});
+    getProfile() {
+        return api.get("/api/account");
     }
 };
 

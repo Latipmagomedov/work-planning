@@ -4,7 +4,21 @@
       <desktop-menu ref="desktopMenu"/>
       <div class="profile__wrapper container">
         <div class="profile__info">
-          <div class="profile__ava">{{ user.username ? user.username[0].toUpperCase() : 'U' }}</div>
+          <div class="profile__upload">
+            <div class="profile__ava" v-if="!imageUrl">{{ user.username ? user.username[0].toUpperCase() : 'U' }}
+            </div>
+            <div class="profile__ava"
+                 v-if="imageUrl"
+                 :style="{backgroundImage: `url(${imageUrl})`}"
+            ></div>
+            <div class="profile__edit-image" v-if="!imageUrl">
+              <p>+</p>
+              <input type="file" @change="uploadImage">
+            </div>
+            <div class="profile__edit-image" v-if="imageUrl" @click="deleteImage">
+              <img src="@/assets/images/icons/x.svg" alt="remove">
+            </div>
+          </div>
           <div class="profile__name">{{ user.username ? user.username : 'User' }}</div>
           <button class="profile__signout" @click="logout">Выйти</button>
         </div>
@@ -25,7 +39,8 @@ export default {
   },
   data() {
     return {
-      user: ''
+      user: '',
+      imageUrl: '',
     }
   },
   created() {
@@ -34,8 +49,29 @@ export default {
   methods: {
     getUser() {
       this.$load(async () => {
-        const response = await this.$auth.getProfile();
+        const response = await this.$profile.getProfile();
         this.user = response.data
+        if (response.data.profileImage) {
+          this.imageUrl = `${process.env.VUE_APP_BASE_API}${response.data.profileImage}`
+        }
+      })
+    },
+    uploadImage(e) {
+      const file = e.target.files
+      const formData = new FormData()
+      formData.append('files', file[0])
+
+      this.$load(async () => {
+        const response = await this.$profile.uploadImage(formData)
+        if (response.data) {
+          this.imageUrl = `${process.env.VUE_APP_BASE_API}${response.data}`
+        }
+      })
+    },
+    deleteImage() {
+      this.$load(async () => {
+        await this.$profile.deleteImage()
+        this.imageUrl = ''
       })
     },
     logout() {
@@ -68,6 +104,12 @@ export default {
     background-color: $main-col;
   }
 
+  &__upload {
+    margin-right: -65px;
+    display: flex;
+    align-items: center;
+  }
+
   &__ava {
     width: 100px;
     height: 100px;
@@ -76,8 +118,39 @@ export default {
     align-items: center;
     justify-content: center;
     background-color: $brand-col;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     font-size: 40px;
     font-weight: 700;
+  }
+
+  &__edit-image {
+    position: relative;
+    width: 50px;
+    height: 50px;
+    margin-left: 15px;
+    border-radius: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #595959;
+    overflow: hidden;
+    cursor: pointer;
+
+    p {
+      font-size: 35px;
+    }
+
+    input {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      cursor: pointer;
+    }
   }
 
   &__name {
