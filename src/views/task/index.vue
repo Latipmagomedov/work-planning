@@ -2,10 +2,19 @@
   <div class="task" :class="{'task_skeleton': !onload}">
     <div class="container">
       <div class="task__header">
-        <div class="task__back" @click="$router.push('/')">
+
+        <div class="task__btn-icon" @click="$router.push('/')">
           <img src="@/assets/images/icons/arrow-left.svg" alt="back">
         </div>
-        <p class="task__header-title" @click="deleteTask">Удалить</p>
+        <div class="task__btns">
+          <div class="task__btn-icon"
+               @click="$router.push({path: '/create-task', query: {edit: taskId}})">
+            <img src="@/assets/images/icons/edit.svg" alt="edit">
+          </div>
+          <div class="task__btn-icon" @click="deleteTask">
+            <img src="@/assets/images/icons/delete.svg" alt="delete">
+          </div>
+        </div>
       </div>
       <div class="task__wrapper">
         <div class="task__wrapper-header"
@@ -106,8 +115,26 @@ export default {
     user-select: none;
   }
 
-  &__back {
+  &__btns {
+    display: flex;
+  }
+
+  &__btn-icon {
     cursor: pointer;
+
+    &:not(:first-child) {
+      margin-left: 30px;
+    }
+
+    img {
+      min-width: 24px;
+      max-width: 24px;
+    }
+  }
+
+  &__btns &__btn-icon img {
+    min-width: 22px;
+    max-width: 22px;
   }
 
   &__header-title {

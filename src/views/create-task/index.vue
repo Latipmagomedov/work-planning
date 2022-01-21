@@ -59,8 +59,14 @@
           </button>
         </div>
         <button class="add-task__add"
+                v-if="!editTaskId"
                 @click="addTasks"
                 :disabled="disbledBtn">Добавить задачу
+        </button>
+        <button class="add-task__add"
+                v-if="editTaskId"
+                @click="editTasks"
+                :disabled="disbledBtn">Сохранить
         </button>
       </div>
     </div>
@@ -81,6 +87,7 @@ export default {
     return {
       showDatepicker: false,
       disbledBtn: false,
+      editTaskId: this.$route.query.edit ? this.$route.query.edit : null,
       task: {
         completed: false,
         title: '',
@@ -105,7 +112,19 @@ export default {
       return this.task.deadline.toLocaleString()
     },
   },
+  created() {
+    if (this.editTaskId) {
+      this.getTask(this.editTaskId)
+    }
+  },
   methods: {
+    getTask(id) {
+      this.$load(async () => {
+        const response = await this.$task.getTask(id);
+        this.task = response.data[0]
+        if (response.data[0].deadline) this.task.deadline = new Date(response.data[0].deadline)
+      })
+    },
     addSubtask() {
       this.task.subtasks.push({title: '', completed: false});
     },
@@ -129,14 +148,21 @@ export default {
       }]
 
       this.$load(async () => {
-        const response = await this.$task.createTask(body);
+        await this.$task.createTask(body);
+        await this.$router.push('/')
+      })
+    },
+    editTasks() {
+      if (this.$v.$invalid) {
+        this.$v.$touch();
+        return;
+      }
 
-        if (response.statusText === "OK") {
-          await this.$router.push('/')
-        } else {
-          this.$refs.message.open("Ошибка", response.data.message, 3000);
-          this.disbledBtn = false
-        }
+      this.disbledBtn = true
+
+      this.$load(async () => {
+        await this.$task.updateTask(this.task);
+        await this.$router.push(`/task/${this.editTaskId}`)
       })
     },
   },
@@ -169,6 +195,7 @@ export default {
 
   &__warpper {
     margin-top: 15px;
+    padding-bottom: 15px;
   }
 
   &__inp {
