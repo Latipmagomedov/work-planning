@@ -4,23 +4,29 @@
       <desktop-menu ref="desktopMenu"/>
       <div class="profile__wrapper container">
         <div class="profile__info">
-          <div class="profile__upload">
-            <div class="profile__ava" v-if="!imageUrl">{{ user.username ? user.username[0].toUpperCase() : 'U' }}
+          <div class="profile__info-wrapper" v-if="!qrCodeOpne">
+            <div class="profile__upload">
+              <div class="profile__btn" @click="toggleQrCode">
+                <img src="@/assets/images/icons/qr.svg" alt="qr">
+              </div>
+              <div class="profile__ava" v-if="!imageUrl">{{ user.username ? user.username[0].toUpperCase() : 'U' }}
+              </div>
+              <div class="profile__ava"
+                   v-if="imageUrl"
+                   :style="{backgroundImage: `url(${imageUrl})`}"
+              ></div>
+              <div class="profile__btn" v-if="!imageUrl">
+                <p>+</p>
+                <input type="file" @change="uploadImage">
+              </div>
+              <div class="profile__btn" v-if="imageUrl" @click="deleteImage">
+                <img src="@/assets/images/icons/x.svg" alt="remove">
+              </div>
             </div>
-            <div class="profile__ava"
-                 v-if="imageUrl"
-                 :style="{backgroundImage: `url(${imageUrl})`}"
-            ></div>
-            <div class="profile__edit-image" v-if="!imageUrl">
-              <p>+</p>
-              <input type="file" @change="uploadImage">
-            </div>
-            <div class="profile__edit-image" v-if="imageUrl" @click="deleteImage">
-              <img src="@/assets/images/icons/x.svg" alt="remove">
-            </div>
+            <div class="profile__name">{{ user.username ? user.username : 'User' }}</div>
+            <button class="profile__signout" @click="logout">Выйти</button>
           </div>
-          <div class="profile__name">{{ user.username ? user.username : 'User' }}</div>
-          <button class="profile__signout" @click="logout">Выйти</button>
+          <qr-code v-if="qrCodeOpne" @closeQrCode="toggleQrCode"/>
         </div>
       </div>
     </div>
@@ -31,16 +37,19 @@
 <script>
 import DesktopMenu from "@/components/desktopMenu";
 import NavMenu from "@/components/navMenu";
+import QrCode from "@/components/qrCode";
 
 export default {
   components: {
     NavMenu,
-    DesktopMenu
+    DesktopMenu,
+    QrCode
   },
   data() {
     return {
       user: '',
       imageUrl: '',
+      qrCodeOpne: false,
     }
   },
   created() {
@@ -77,6 +86,9 @@ export default {
     logout() {
       this.$store.dispatch("user/logout");
       this.$router.push('/auth')
+    },
+    toggleQrCode() {
+      this.qrCodeOpne = !this.qrCodeOpne
     }
   }
 };
@@ -95,7 +107,7 @@ export default {
   &__info {
     width: 100%;
     max-width: 400px;
-    height: 300px;
+    height: 400px;
     border-radius: 10px;
     display: flex;
     flex-direction: column;
@@ -104,8 +116,14 @@ export default {
     background-color: $main-col;
   }
 
+  &__info-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
   &__upload {
-    margin-right: -65px;
     display: flex;
     align-items: center;
   }
@@ -113,6 +131,7 @@ export default {
   &__ava {
     width: 100px;
     height: 100px;
+    margin: 0 15px;
     border-radius: 100%;
     display: flex;
     align-items: center;
@@ -125,11 +144,10 @@ export default {
     font-weight: 700;
   }
 
-  &__edit-image {
+  &__btn {
     position: relative;
     width: 50px;
     height: 50px;
-    margin-left: 15px;
     border-radius: 100%;
     display: flex;
     align-items: center;

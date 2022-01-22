@@ -2,7 +2,7 @@
   <div class="sign container">
     <pop-up-message ref="message"/>
     <div class="sign__content">
-      <div class="sign__bottom">
+      <div class="sign__auth">
         <h2 class="sign__title">
           {{ formType === "register" ? "Регистрация" : "Вход" }}
         </h2>
@@ -116,9 +116,22 @@
             }}
           </div>
 
-          <button class="sign__btn" @click="next">Продолжить</button>
+          <div class="sign__btns">
+            <button class="sign__btn-next"
+                    :class="{'sign__btn-next_login': formType === 'login'}"
+                    @click="next">Продолжить
+            </button>
+            <button class="sign__btn-camera"
+                    v-if="formType === 'login'"
+                    @click="openCamera">
+              <img src="@/assets/images/icons/qr.svg" alt="qr">
+            </button>
+          </div>
         </div>
       </div>
+      <camera-scanner v-if="camera"
+                      @close="camera= false"
+                      @scanned="scanned"/>
     </div>
   </div>
 </template>
@@ -126,14 +139,17 @@
 <script>
 import {required, minLength, sameAs} from "vuelidate/lib/validators";
 import PopUpMessage from "@/components/popUpMessage";
+import CameraScanner from "@/components/cameraScanner";
 
 export default {
   components: {
-    PopUpMessage
+    PopUpMessage,
+    CameraScanner
   },
   data() {
     return {
       formType: "register",
+      camera: false,
       form: {
         name: "",
         password: "",
@@ -209,9 +225,8 @@ export default {
         };
         const response = await this.$auth.signIn(body);
         if (response.statusText === "OK") {
-          this.$store.dispatch("user/login", response.data.token);
-          console.log(response)
-          this.$router.push('/');
+          await this.$store.dispatch("user/login", response.data.token);
+          await this.$router.push('/');
         } else {
           this.$refs.message.open("Ошибка", response.data.message, 3000);
         }
@@ -224,6 +239,25 @@ export default {
         this.formType = "register";
       }
     },
+    openCamera() {
+      this.camera = true
+    },
+    scanned(result) {
+      if (result) {
+        this.camera = false
+        this.$store.dispatch("user/login", result);
+        console.log(result)
+        this.$load(async () => {
+          const response = await this.$profile.getProfile();
+          if (response.data.username) {
+            console.log(response)
+            await this.$router.push('/');
+          } else {
+            this.$refs.message.open("Ошибка", 'Пользователь не существует', 3000);
+          }
+        })
+      }
+    }
   },
 };
 </script>
@@ -255,7 +289,7 @@ $pc-version: 480px;
     }
   }
 
-  &__bottom {
+  &__auth {
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -302,12 +336,32 @@ $pc-version: 480px;
     font-size: 10px;
   }
 
-  &__btn {
+  &__btns {
     margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__btn-next {
     width: 170px;
     height: 50px;
     border-radius: 13px;
     font-size: 16px;
+
+    &_login {
+      width: 80%;
+    }
+  }
+
+  &__btn-camera {
+    width: 17%;
+    height: 50px;
+    border-radius: 13px;
+    font-size: 16px;
+
+    img {
+      max-width: 24px;
+    }
   }
 
   &__toggle {

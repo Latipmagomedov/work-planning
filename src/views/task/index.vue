@@ -61,7 +61,13 @@ export default {
   },
   computed: {
     date() {
-      return this.task.deadline ? new Date(this.task.deadline).toLocaleString() : ''
+      if (!this.task.deadline) return
+      let fullDate = new Date(this.task.deadline)
+      // Временно !!!
+      // Прибавляю к дате +3 часа т.к на бэке сохраняется неправильно
+      fullDate.setMilliseconds(3 * 60 * 60 * 1000)
+
+      return fullDate.toLocaleString()
     }
   },
   created() {

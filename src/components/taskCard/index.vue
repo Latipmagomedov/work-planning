@@ -38,11 +38,15 @@ export default {
   computed: {
     date() {
       if (!this.task.deadline) return
-      const date = new Date(this.task.deadline).toLocaleString()
-      return date
+      let fullDate = new Date(this.task.deadline)
+      // Временно !!!
+      // Прибавляю к дате +3 часа т.к на бэке сохраняется неправильно
+      fullDate.setMilliseconds(3 * 60 * 60 * 1000)
+
+      return fullDate.toLocaleString()
     }
-  }
-};
+  },
+}
 </script>
 
 <style lang="scss" scoped>

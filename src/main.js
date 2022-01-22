@@ -9,6 +9,7 @@ import LoadPlugin from "./plugins/load";
 import Calendar from "v-calendar/lib/components/calendar.umd";
 import DatePicker from "v-calendar/lib/components/date-picker.umd";
 import Vuelidate from "vuelidate";
+import VueQrcodeReader from "vue-qrcode-reader";
 
 Vue.config.productionTip = false;
 
@@ -17,6 +18,7 @@ Vue.use(LoadPlugin);
 Vue.component("calendar", Calendar);
 Vue.component("date-picker", DatePicker);
 Vue.use(Vuelidate);
+Vue.use(VueQrcodeReader);
 
 new Vue({
   router,
