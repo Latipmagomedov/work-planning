@@ -30,9 +30,8 @@
             </div>
             <button class="profile__signout" @click="logout">Выйти</button>
           </div>
-          <transition name="bounce">
-            <qr-code v-if="qrCodeOpne" @closeQrCode="toggleQrCode" />
-          </transition>
+
+          <qr-code v-if="qrCodeOpne" @closeQrCode="toggleQrCode" />
         </div>
       </div>
     </div>
