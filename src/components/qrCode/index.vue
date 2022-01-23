@@ -46,6 +46,7 @@ export default {
     position: absolute;
     right: 15px;
     top: 13px;
+    cursor: pointer;
 
     img {
       max-width: 20px;

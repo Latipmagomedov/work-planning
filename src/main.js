@@ -6,6 +6,10 @@ import store from "./store";
 
 import ApiPlugin from "./plugins/api";
 import LoadPlugin from "./plugins/load";
+import MessagePlugin from "./plugins/message";
+
+import FullModalWindow from "@/components/fullModalWindow/index.vue";
+
 import Calendar from "v-calendar/lib/components/calendar.umd";
 import DatePicker from "v-calendar/lib/components/date-picker.umd";
 import Vuelidate from "vuelidate";
@@ -15,6 +19,10 @@ Vue.config.productionTip = false;
 
 Vue.use(ApiPlugin);
 Vue.use(LoadPlugin);
+Vue.use(MessagePlugin);
+
+Vue.component("FullModalWindow", FullModalWindow);
+
 Vue.component("calendar", Calendar);
 Vue.component("date-picker", DatePicker);
 Vue.use(Vuelidate);

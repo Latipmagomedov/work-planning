@@ -1,30 +1,29 @@
 <template>
-  <transition name="slide-fade" v-if="$store.getters.modalName">
-    <div class="modal-window">
-      <div class="container"></div>
+  <transition name="fade">
+    <div class="modal-window" v-if="this.$store.getters.modalName">
+      <div class="modal-window__warapper container">
+        <div class="modal-window__header">
+          <div
+            class="modal-window__back"
+            @click="$store.dispatch('modal/toggle')"
+          >
+            <img src="@/assets/images/icons/arrow-left.svg" alt="close" />
+          </div>
+        </div>
+        <div class="modal-window__content">
+          <slot name="body"></slot>
+        </div>
+      </div>
     </div>
   </transition>
 </template>
 
 <script>
+import CameraScanner from "@/components/fullModalWindow/modalBodies/cameraScanner";
 export default {
   name: "fullModalWindow",
-  data() {
-    return {
-      open: false,
-      modalName: "",
-    };
-  },
-  computed: {
-    name() {
-      return this.$store.getters.modalName
-    }
-  },
-  methods: {
-    toggle(name) {
-      this.open = !this.open;
-      this.open ? (this.modalName = name) : (this.modalName = "");
-    },
+  components: {
+    CameraScanner,
   },
 };
 </script>
@@ -38,6 +37,12 @@ export default {
   height: 100%;
   background-color: $bg-col;
   z-index: 990;
+
+  &__warapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 
   &__header {
     width: 100%;
@@ -62,6 +67,14 @@ export default {
   &__title {
     color: $brand-col;
     font-size: 16px;
+  }
+
+  &__content {
+    width: 100%;
+    height: calc(100vh - 130px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }
 </style>

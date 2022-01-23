@@ -1,36 +1,42 @@
 <template>
   <div class="profile">
     <div class="profile__content">
-      <desktop-menu ref="desktopMenu"/>
+      <desktop-menu ref="desktopMenu" />
       <div class="profile__wrapper container">
         <div class="profile__info">
           <div class="profile__info-wrapper" v-if="!qrCodeOpne">
             <div class="profile__upload">
               <div class="profile__btn" @click="toggleQrCode">
-                <img src="@/assets/images/icons/qr.svg" alt="qr">
+                <img src="@/assets/images/icons/qr.svg" alt="qr" />
               </div>
-              <div class="profile__ava" v-if="!imageUrl">{{ user.username ? user.username[0].toUpperCase() : 'U' }}
+              <div class="profile__ava" v-if="!imageUrl">
+                {{ user.username ? user.username[0].toUpperCase() : "U" }}
               </div>
-              <div class="profile__ava"
-                   v-if="imageUrl"
-                   :style="{backgroundImage: `url(${imageUrl})`}"
+              <div
+                class="profile__ava"
+                v-if="imageUrl"
+                :style="{ backgroundImage: `url(${imageUrl})` }"
               ></div>
               <div class="profile__btn" v-if="!imageUrl">
                 <p>+</p>
-                <input type="file" @change="uploadImage">
+                <input type="file" @change="uploadImage" />
               </div>
               <div class="profile__btn" v-if="imageUrl" @click="deleteImage">
-                <img src="@/assets/images/icons/x.svg" alt="remove">
+                <img src="@/assets/images/icons/x.svg" alt="remove" />
               </div>
             </div>
-            <div class="profile__name">{{ user.username ? user.username : 'User' }}</div>
+            <div class="profile__name">
+              {{ user.username ? user.username : "User" }}
+            </div>
             <button class="profile__signout" @click="logout">Выйти</button>
           </div>
-          <qr-code v-if="qrCodeOpne" @closeQrCode="toggleQrCode"/>
+          <transition name="bounce">
+            <qr-code v-if="qrCodeOpne" @closeQrCode="toggleQrCode" />
+          </transition>
         </div>
       </div>
     </div>
-    <nav-menu/>
+    <nav-menu />
   </div>
 </template>
 
@@ -43,54 +49,54 @@ export default {
   components: {
     NavMenu,
     DesktopMenu,
-    QrCode
+    QrCode,
   },
   data() {
     return {
-      user: '',
-      imageUrl: '',
+      user: "",
+      imageUrl: "",
       qrCodeOpne: false,
-    }
+    };
   },
   created() {
-    this.getUser()
+    this.getUser();
   },
   methods: {
     getUser() {
       this.$load(async () => {
         const response = await this.$profile.getProfile();
-        this.user = response.data
+        this.user = response.data;
         if (response.data.profileImage) {
-          this.imageUrl = `${process.env.VUE_APP_BASE_API}${response.data.profileImage}`
+          this.imageUrl = `${process.env.VUE_APP_BASE_API}${response.data.profileImage}`;
         }
-      })
+      });
     },
     uploadImage(e) {
-      const file = e.target.files
-      const formData = new FormData()
-      formData.append('files', file[0])
+      const file = e.target.files;
+      const formData = new FormData();
+      formData.append("files", file[0]);
 
       this.$load(async () => {
-        const response = await this.$profile.uploadImage(formData)
+        const response = await this.$profile.uploadImage(formData);
         if (response.data) {
-          this.imageUrl = `${process.env.VUE_APP_BASE_API}${response.data}`
+          this.imageUrl = `${process.env.VUE_APP_BASE_API}${response.data}`;
         }
-      })
+      });
     },
     deleteImage() {
       this.$load(async () => {
-        await this.$profile.deleteImage()
-        this.imageUrl = ''
-      })
+        await this.$profile.deleteImage();
+        this.imageUrl = "";
+      });
     },
     logout() {
       this.$store.dispatch("user/logout");
-      this.$router.push('/auth')
+      this.$router.push("/auth");
     },
     toggleQrCode() {
-      this.qrCodeOpne = !this.qrCodeOpne
-    }
-  }
+      this.qrCodeOpne = !this.qrCodeOpne;
+    },
+  },
 };
 </script>
 
@@ -114,6 +120,7 @@ export default {
     align-items: center;
     justify-content: center;
     background-color: $main-col;
+    overflow: hidden;
   }
 
   &__info-wrapper {

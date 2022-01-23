@@ -1,25 +1,8 @@
 <template>
   <div id="app">
-    <full-modal-window/>
-    <router-view/>
+    <router-view />
   </div>
 </template>
-<script>
-import FullModalWindow from "@/components/fullModalWindow";
-
-export default {
-  components: {
-    FullModalWindow,
-  },
-  created() {
-    if (localStorage.token) {
-      this.$store.dispatch("user/login", localStorage.token);
-    } else {
-      this.$router.push('/auth')
-    }
-  },
-};
-</script>
 
 <style lang="scss">
 @import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700;800&display=swap");
@@ -170,6 +153,8 @@ img {
   transform: translateX(-100%);
 }
 
+// ------------------ //
+
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.3s;
@@ -178,5 +163,28 @@ img {
 .fade-enter,
 .fade-leave-to {
   opacity: 0;
+}
+
+// ------------------ //
+
+.bounce-enter-active {
+  animation: bounce-in 0.6s;
+}
+.bounce-leave-active {
+  animation: bounce-in 0.5s reverse;
+}
+@keyframes bounce-in {
+  0% {
+    transform: scale(7);
+  }
+  50% {
+    transform: scale(5);
+  }
+  70% {
+    transform: scale(3);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 </style>

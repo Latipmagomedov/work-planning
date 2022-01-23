@@ -1,6 +1,6 @@
 <template>
   <transition name="fade">
-    <div class="message container" v-if="isOpen">
+    <div class="message container" v-show="isOpen">
       <div class="message__content">
         <h3 class="message__title">{{ content.title }}</h3>
         <p class="message__desc">{{ content.desc }}</p>
@@ -43,6 +43,7 @@ export default {
   left: 50%;
   transform: translate(-50%);
   width: 100%;
+  z-index: 9999;
 
   &__content {
     padding: 13px 20px;
