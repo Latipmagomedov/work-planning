@@ -1,29 +1,31 @@
 import axios from "axios";
 import store from "../store";
+import Vue from "vue";
 
 const api = axios.create({
-    baseURL: process.env.VUE_APP_BASE_API,
-    withCredentials: true,
+  baseURL: process.env.VUE_APP_BASE_API,
+  withCredentials: true,
 });
 api.interceptors.request.use(
-    async config => {
-        if (store.getters.token) config.headers['Authorization'] = `Bearer ${store.getters.token}`;
-        config.headers['Content-Type'] = 'application/json';
+  async (config) => {
+    if (store.getters.token)
+      config.headers["Authorization"] = `Bearer ${store.getters.token}`;
+    config.headers["Content-Type"] = "application/json";
 
-        return config;
-    },
-    error => {
-        Promise.reject(error)
-    }
-)
+    return config;
+  },
+  (error) => {
+    Promise.reject(error);
+  }
+);
 
 api.interceptors.response.use(
-    (response) => {
-        return response;
-    },
-    (error) => {
-        return error.response;
-    }
+  (response) => {
+    return response.data;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
 );
 
 export default api;

@@ -5,7 +5,6 @@ import router from "./router";
 import store from "./store";
 
 import ApiPlugin from "./plugins/api";
-import LoadPlugin from "./plugins/load";
 import MessagePlugin from "./plugins/message";
 
 import FullModalWindow from "@/components/fullModalWindow/index.vue";
@@ -15,10 +14,10 @@ import DatePicker from "v-calendar/lib/components/date-picker.umd";
 import Vuelidate from "vuelidate";
 import VueQrcodeReader from "vue-qrcode-reader";
 
+
 Vue.config.productionTip = false;
 
 Vue.use(ApiPlugin);
-Vue.use(LoadPlugin);
 Vue.use(MessagePlugin);
 
 Vue.component("FullModalWindow", FullModalWindow);

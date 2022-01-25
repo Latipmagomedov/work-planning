@@ -3,70 +3,79 @@
     <div class="container">
       <div class="add-task__header">
         <div class="add-task__back" @click="$router.push('/')">
-          <img src="@/assets/images/icons/arrow-left.svg" alt="back">
+          <img src="@/assets/images/icons/arrow-left.svg" alt="back" />
         </div>
         <p class="add-task__header-title">Новая задача</p>
       </div>
       <div class="add-task__warpper">
-        <pop-up-message ref="message"/>
+        <pop-up-message ref="message" />
         <input
-            type="text"
-            placeholder="Название задачи"
-            class="add-task__inp"
-            :class="{'inp-error': $v.task.title.$dirty && !$v.task.title.required}"
-            v-model="task.title"
+          type="text"
+          placeholder="Название задачи"
+          class="add-task__inp"
+          :class="{
+            'inp-error': $v.task.title.$dirty && !$v.task.title.required,
+          }"
+          v-model="task.title"
         />
         <textarea
-            class="add-task__description"
-            placeholder="Описание задачи"
-            v-model="task.description"></textarea>
+          class="add-task__description"
+          placeholder="Описание задачи"
+          v-model="task.description"
+        ></textarea>
         <div
-            class="add-task__fake-inp"
-            :class="{ 'add-task__fake-inp_active': task.deadline }"
-            @click="showDatepicker = !showDatepicker"
+          class="add-task__fake-inp"
+          :class="{ 'add-task__fake-inp_active': task.deadline }"
+          @click="showDatepicker = !showDatepicker"
         >
           <p>{{ task.deadline ? getSelectedDate : "Деделайн" }}</p>
         </div>
         <transition name="fade">
           <date-picker
-              class="add-task__datepicker"
-              v-if="showDatepicker"
-              v-model="task.deadline"
-              mode="dateTime"
-              is-dark
-              is24hr
-              color="blue"
+            class="add-task__datepicker"
+            v-if="showDatepicker"
+            v-model="task.deadline"
+            mode="dateTime"
+            is-dark
+            is24hr
+            color="blue"
           />
         </transition>
         <div class="add-task__subtasks">
           <h3 class="add-task__subtasks-title">Подзадачи</h3>
           <div
-              class="add-task__subtasks-inp"
-              v-for="(subtask, index) in task.subtasks"
-              :key="index">
+            class="add-task__subtasks-inp"
+            v-for="(subtask, index) in task.subtasks"
+            :key="index"
+          >
             <input
-                type="text"
-                placeholder="Название подзадачи"
-                v-model="subtask.title"
+              type="text"
+              placeholder="Название подзадачи"
+              v-model="subtask.title"
             />
             <div class="add-task__subtasks-remove" @click="removeTask(index)">
-              <img src="@/assets/images/icons/x.svg" alt="remove">
+              <img src="@/assets/images/icons/x.svg" alt="remove" />
             </div>
           </div>
-          <button class="add-task__subtasks-add"
-                  @click="addSubtask">
+          <button class="add-task__subtasks-add" @click="addSubtask">
             <span>+</span> Добавить подзадачу
           </button>
         </div>
-        <button class="add-task__add"
-                v-if="!editTaskId"
-                @click="addTasks"
-                :disabled="disbledBtn">Добавить задачу
+        <button
+          class="add-task__add"
+          v-if="!editTaskId"
+          @click="addTasks"
+          :disabled="disbledBtn"
+        >
+          Добавить задачу
         </button>
-        <button class="add-task__add"
-                v-if="editTaskId"
-                @click="editTasks"
-                :disabled="disbledBtn">Сохранить
+        <button
+          class="add-task__add"
+          v-if="editTaskId"
+          @click="editTasks"
+          :disabled="disbledBtn"
+        >
+          Сохранить
         </button>
       </div>
     </div>
@@ -74,14 +83,14 @@
 </template>
 
 <script>
-import {required} from "vuelidate/lib/validators";
+import { required } from "vuelidate/lib/validators";
 
 import PopUpMessage from "@/components/popUpMessage";
 
 export default {
   name: "AddTask",
   components: {
-    PopUpMessage
+    PopUpMessage,
   },
   data() {
     return {
@@ -90,80 +99,82 @@ export default {
       editTaskId: this.$route.query.edit ? this.$route.query.edit : null,
       task: {
         completed: false,
-        title: '',
-        description: '',
+        title: "",
+        description: "",
         deadline: new Date(),
-        subtasks: [{
-          title: '',
-          completed: false,
-        }],
+        subtasks: [
+          {
+            title: "",
+            completed: false,
+          },
+        ],
       },
     };
   },
   validations: {
     task: {
       title: {
-        required
-      }
-    }
+        required,
+      },
+    },
   },
   computed: {
     getSelectedDate() {
-      return this.task.deadline.toLocaleString()
+      return this.task.deadline.toLocaleString();
     },
   },
   created() {
     if (this.editTaskId) {
-      this.getTask(this.editTaskId)
+      this.getTask(this.editTaskId);
     }
   },
   methods: {
-    getTask(id) {
-      this.$load(async () => {
-        const response = await this.$task.getTask(id);
-        this.task = response.data[0]
-        if (response.data[0].deadline) this.task.deadline = new Date(response.data[0].deadline)
-      })
+    async getTask(id) {
+      const response = await this.$task.getTask(id);
+      this.task = response[0];
+      if (response[0].deadline)
+        this.task.deadline = new Date(response[0].deadline);
     },
     addSubtask() {
-      this.task.subtasks.push({title: '', completed: false});
+      this.task.subtasks.push({ title: "", completed: false });
     },
     removeTask(index) {
-      this.task.subtasks.splice(index, 1)
+      this.task.subtasks.splice(index, 1);
     },
-    addTasks() {
+    async addTasks() {
       if (this.$v.$invalid) {
         this.$v.$touch();
         return;
       }
 
-      this.disbledBtn = true
+      this.disbledBtn = true;
 
-      const body = [{
-        title: this.task.title,
-        description: this.task.description,
-        completed: this.task.completed,
-        deadline: this.task.deadline,
-        subtasks: this.task.subtasks[0] && this.task.subtasks[0].title ? this.task.subtasks : []
-      }]
+      const body = [
+        {
+          title: this.task.title,
+          description: this.task.description,
+          completed: this.task.completed,
+          deadline: this.task.deadline,
+          subtasks:
+            this.task.subtasks[0] && this.task.subtasks[0].title
+              ? this.task.subtasks
+              : [],
+        },
+      ];
 
-      this.$load(async () => {
-        await this.$task.createTask(body);
-        await this.$router.push('/')
-      })
+      await this.$task.createTask(body);
+      this.$router.push("/");
     },
-    editTasks() {
+    async editTasks() {
       if (this.$v.$invalid) {
         this.$v.$touch();
         return;
       }
 
-      this.disbledBtn = true
+      this.disbledBtn = true;
 
-      this.$load(async () => {
-        await this.$task.updateTask(this.task);
-        await this.$router.push(`/task/${this.editTaskId}`)
-      })
+      await this.$task.updateTask(this.task);
+      this.$router.push(`/task/${this.editTaskId}`);
     },
   },
 };

@@ -1,32 +1,41 @@
 <template>
   <div class="home">
     <div class="home__content">
-      <desktop-menu ref="desktopMenu"/>
+      <desktop-menu ref="desktopMenu" />
       <main-header
-          @search="search = $event"
-          @togglePostion="togglePostion"
-          @toggleDesktopMenu="toggleDesktopMenu"
+        @search="search = $event"
+        @togglePostion="togglePostion"
+        @toggleDesktopMenu="toggleDesktopMenu"
       />
-      <welcome-banner class="home__banner" :length="tasks.length"/>
+      <welcome-banner class="home__banner" :length="tasks.length" />
       <div class="home__wrapper container">
-        <h2 class="home__title"
-            :class="{'home__title_empty': !tasks.length && onload}"
-            v-if="onload"
-        >{{ tasks.length ? 'Задачи' : 'Задач пока нет (' }}</h2>
+        <h2
+          class="home__title"
+          :class="{ home__title_empty: !tasks.length && onload }"
+          v-if="onload"
+        >
+          {{ tasks.length ? "Задачи" : "Задач пока нет (" }}
+        </h2>
         <h2 class="home__title" v-if="!onload">Загрузка . . .</h2>
 
-        <div class="home__tasks" :class="{ home__tasks_col: position === 'column' }">
-          <skeleton-card v-if="!onload"
-                         v-for="item in 30"
-                         :key="item"
-                         :position="position"/>
+        <div
+          class="home__tasks"
+          :class="{ home__tasks_col: position === 'column' }"
+        >
+          <skeleton-card
+            v-if="!onload"
+            v-for="item in 30"
+            :key="item"
+            :position="position"
+          />
 
-          <task-card v-if="onload"
-                     v-for="task in allTasks"
-                     :key="task.id"
-                     :task="task"
-                     :position="position"
-                     @openTask="$router.push(`/task/${task.id}`)"
+          <task-card
+            v-if="onload"
+            v-for="task in allTasks"
+            :key="task.id"
+            :task="task"
+            :position="position"
+            @openTask="$router.push(`/task/${task.id}`)"
           />
         </div>
       </div>
@@ -34,7 +43,7 @@
         <span>+</span>
         <p>Создать задачу</p>
       </button>
-      <nav-menu/>
+      <nav-menu />
     </div>
   </div>
 </template>
@@ -60,30 +69,29 @@ export default {
   data() {
     return {
       position: "grid",
-      search: '',
+      search: "",
       onload: false,
       tasks: [],
     };
   },
   computed: {
     allTasks() {
-      let filtration = []
-      this.tasks.forEach(item => {
-        if (item.title.toLowerCase().indexOf(this.search.toLowerCase()) >= 0) filtration.push(item)
+      let filtration = [];
+      this.tasks.forEach((item) => {
+        if (item.title.toLowerCase().indexOf(this.search.toLowerCase()) >= 0)
+          filtration.push(item);
       });
-      return filtration
-    }
+      return filtration;
+    },
   },
   created() {
-    if (this.$store.getters.token) this.getTasks()
+    if (this.$store.getters.token) this.getTasks();
   },
   methods: {
-    getTasks() {
-      this.$load(async () => {
-        const response = await this.$task.getTasks();
-        this.tasks = response.data
-        if (this.tasks) this.onload = true
-      })
+    async getTasks() {
+      const response = await this.$task.getTasks();
+      this.tasks = response;
+      if (this.tasks) this.onload = true;
     },
     togglePostion(position) {
       this.position = position;

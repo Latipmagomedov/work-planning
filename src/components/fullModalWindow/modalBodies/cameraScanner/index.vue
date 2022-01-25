@@ -10,23 +10,20 @@
 export default {
   data() {
     return {
-      show: false
-    }
+      show: false,
+    };
   },
   mounted() {
-    this.show = true
+    this.show = true;
   },
   methods: {
-    onDecode(decodedString) {
+    async onDecode(decodedString) {
       if (decodedString) {
         this.$store.dispatch("user/login", decodedString);
         this.$store.dispatch("modal/toggle");
 
-        this.$load(async () => {
-          const response = await this.$profile.getProfile();
-          if (response.data.username) await this.$router.push("/");
-          else this.$message.open("Ошибка", "Пользователь не существует", 3000);
-        });
+        const response = await this.$profile.getProfile();
+        if (response.data.username) this.$router.push("/");
       }
     },
   },

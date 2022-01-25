@@ -208,34 +208,32 @@ export default {
         this.login();
       }
     },
-    register() {
-      this.$load(async () => {
+    async register() {
+      try {
         const body = {
           username: this.form.name,
           password: this.form.password,
         };
-        const response = await this.$auth.signUp(body);
-        if (response.statusText === "OK") {
-          this.toggleForm();
-        } else {
-          this.$message.open("Ошибка", response.data.message, 3000);
-        }
-      });
+        await this.$auth.signUp(body);
+        this.toggleForm();
+      } catch (error) {
+        this.$message.open("Ошибка", error.response.data.message, 3000);
+        console.log(error.response);
+      }
     },
-    login() {
-      this.$load(async () => {
-        const body = {
-          username: this.form.name,
-          password: this.form.password,
-        };
+    async login() {
+      const body = {
+        username: this.form.name,
+        password: this.form.password,
+      };
+      try {
         const response = await this.$auth.signIn(body);
-        if (response.statusText === "OK") {
-          await this.$store.dispatch("user/login", response.data.token);
-          await this.$router.push("/");
-        } else {
-          this.$message.open("Ошибка", response.data.message, 3000);
-        }
-      });
+        this.$store.dispatch("user/login", response.token);
+        this.$router.push("/");
+      } catch (error) {
+        this.$message.open("Ошибка", error.response.data.message, 3000);
+        console.log(error.response);
+      }
     },
     toggleForm() {
       if (this.formType === "register") {

@@ -61,32 +61,26 @@ export default {
     this.getUser();
   },
   methods: {
-    getUser() {
-      this.$load(async () => {
-        const response = await this.$profile.getProfile();
-        this.user = response.data;
-        if (response.data.profileImage) {
-          this.imageUrl = `${process.env.VUE_APP_BASE_API}${response.data.profileImage}`;
-        }
-      });
+    async getUser() {
+      const response = await this.$profile.getProfile();
+      this.user = response;
+      if (response.profileImage) {
+        this.imageUrl = `${process.env.VUE_APP_BASE_API}${response.profileImage}`;
+      }
     },
-    uploadImage(e) {
+    async uploadImage(e) {
       const file = e.target.files;
       const formData = new FormData();
       formData.append("files", file[0]);
 
-      this.$load(async () => {
-        const response = await this.$profile.uploadImage(formData);
-        if (response.data) {
-          this.imageUrl = `${process.env.VUE_APP_BASE_API}${response.data}`;
-        }
-      });
+      const response = await this.$profile.uploadImage(formData);
+      if (response) {
+        this.imageUrl = `${process.env.VUE_APP_BASE_API}${response}`;
+      }
     },
-    deleteImage() {
-      this.$load(async () => {
-        await this.$profile.deleteImage();
-        this.imageUrl = "";
-      });
+    async deleteImage() {
+      await this.$profile.deleteImage();
+      this.imageUrl = "";
     },
     logout() {
       this.$store.dispatch("user/logout");
