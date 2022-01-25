@@ -1,9 +1,7 @@
 <template>
-  <transition name="bounce">
-    <div class="camera" v-if="show">
-      <qrcode-stream class="camera__stream" @decode="onDecode"></qrcode-stream>
-    </div>
-  </transition>
+  <div class="camera" v-if="show">
+    <qrcode-stream class="camera__stream" @decode="onDecode"></qrcode-stream>
+  </div>
 </template>
 
 <script>
@@ -22,8 +20,18 @@ export default {
         this.$store.dispatch("user/login", decodedString);
         this.$store.dispatch("modal/toggle");
 
-        const response = await this.$profile.getProfile();
-        if (response.data.username) this.$router.push("/");
+        try {
+          const response = await this.$profile.getProfile();
+          if (response.username) this.$router.push("/");
+        } catch (error) {
+          this.$message.open({
+            title: "Ошибка",
+            text: error.response.data.message,
+            type: "error",
+            time: 3000,
+          });
+          console.log(error.response);
+        }
       }
     },
   },

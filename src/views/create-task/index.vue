@@ -8,7 +8,6 @@
         <p class="add-task__header-title">Новая задача</p>
       </div>
       <div class="add-task__warpper">
-        <pop-up-message ref="message" />
         <input
           type="text"
           placeholder="Название задачи"
@@ -23,16 +22,21 @@
           placeholder="Описание задачи"
           v-model="task.description"
         ></textarea>
-        <div
-          class="add-task__fake-inp"
-          :class="{ 'add-task__fake-inp_active': task.deadline }"
-          @click="showDatepicker = !showDatepicker"
-        >
-          <p>{{ task.deadline ? getSelectedDate : "Деделайн" }}</p>
+        <div class="add-task__inp-wrapper">
+          <p class="add-task__inp-name">Деделайн</p>
+          <div
+            class="add-task__fake-inp"
+            :class="{ 'add-task__fake-inp_active': task.deadline }"
+            @click="showDatepicker = !showDatepicker"
+          >
+            <p>{{ task.deadline ? getSelectedDate : "Деделайн" }}</p>
+          </div>
         </div>
+
         <transition name="fade">
           <date-picker
             class="add-task__datepicker"
+            :min-date="new Date()"
             v-if="showDatepicker"
             v-model="task.deadline"
             mode="dateTime"
@@ -85,13 +89,8 @@
 <script>
 import { required } from "vuelidate/lib/validators";
 
-import PopUpMessage from "@/components/popUpMessage";
-
 export default {
   name: "AddTask",
-  components: {
-    PopUpMessage,
-  },
   data() {
     return {
       showDatepicker: false,
@@ -207,6 +206,15 @@ export default {
   &__warpper {
     margin-top: 15px;
     padding-bottom: 15px;
+  }
+
+  &__inp-wrapper {
+    margin-top: 5px;
+  }
+
+  &__inp-name {
+    color: #919191;
+    font-size: 14px;
   }
 
   &__inp {

@@ -123,6 +123,7 @@ export default {
 
 <style lang="scss" scoped>
 .task {
+  user-select: text;
   &__header {
     width: 100%;
     margin-top: 10px;

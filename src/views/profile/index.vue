@@ -175,6 +175,7 @@ export default {
     margin-top: 7px;
     font-size: 30px;
     font-weight: 600;
+    user-select: text;
   }
 
   &__signout {

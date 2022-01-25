@@ -7,8 +7,9 @@ const api = axios.create({
 });
 api.interceptors.request.use(
   async (config) => {
-    if (store.getters.token)
+    if (store.getters.token) {
       config.headers["Authorization"] = `Bearer ${store.getters.token}`;
+    }
     config.headers["Content-Type"] = "application/json";
 
     return config;

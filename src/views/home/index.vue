@@ -23,14 +23,14 @@
           :class="{ home__tasks_col: position === 'column' }"
         >
           <skeleton-card
-            v-if="!onload"
+            v-show="!onload"
             v-for="item in 30"
             :key="item"
             :position="position"
           />
 
           <task-card
-            v-if="onload"
+            v-show="onload"
             v-for="task in allTasks"
             :key="task.id"
             :task="task"

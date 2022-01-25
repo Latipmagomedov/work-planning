@@ -1,7 +1,13 @@
 <template>
   <transition name="fade">
-    <div class="message container" v-show="isOpen">
-      <div class="message__content">
+    <div class="message container" v-if="isOpen">
+      <div
+        class="message__content"
+        :class="{
+          message__content_error: type === 'error',
+          message__content_success: type === 'success',
+        }"
+      >
         <h3 class="message__title">{{ content.title }}</h3>
         <p class="message__desc">{{ content.desc }}</p>
       </div>
@@ -15,6 +21,7 @@ export default {
   data() {
     return {
       isOpen: false,
+      type: "default",
       content: {
         title: "",
         desc: "",
@@ -22,14 +29,15 @@ export default {
     };
   },
   methods: {
-    open(title, desc, time) {
+    open(parapms) {
       this.isOpen = true;
-      this.content.title = title;
-      this.content.desc = desc;
+      this.type = parapms.type;
+      this.content.title = parapms.title;
+      this.content.desc = parapms.text;
       if (this.isOpen === true) {
         setTimeout(() => {
           this.isOpen = false;
-        }, time);
+        }, parapms.time);
       }
     },
   },
@@ -43,12 +51,21 @@ export default {
   left: 50%;
   transform: translate(-50%);
   width: 100%;
+  max-width: 480px;
   z-index: 9999;
 
   &__content {
-    padding: 13px 20px;
+    padding: 13px 15px;
     border-radius: 8px;
     background-color: $main-col;
+
+    &_error {
+      background-color: $error;
+    }
+
+    &_success {
+      background-color: $brand-col;
+    }
   }
 
   &__title {
@@ -56,7 +73,7 @@ export default {
   }
 
   &__desc {
-    margin-top: 8px;
+    margin-top: 3px;
     font-size: 15px;
   }
 }

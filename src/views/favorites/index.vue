@@ -1,14 +1,14 @@
 <template>
   <div class="favorites">
     <div class="favorites__content">
-      <desktop-menu ref="desktopMenu"/>
+      <desktop-menu ref="desktopMenu" />
       <div class="favorites__wrapper container">
         <div class="favorites__no-content">
           <h1>Страница в разработке</h1>
         </div>
       </div>
     </div>
-    <nav-menu/>
+    <nav-menu />
   </div>
 </template>
 
@@ -19,8 +19,8 @@ import NavMenu from "@/components/navMenu";
 export default {
   components: {
     NavMenu,
-    DesktopMenu
-  }
+    DesktopMenu,
+  },
 };
 </script>
 

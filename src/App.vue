@@ -18,6 +18,7 @@ body {
   background-color: $bg-col;
   color: $text-col;
   font-family: "Open Sans", sans-serif;
+  user-select: none;
 }
 
 h1 {
@@ -175,13 +176,10 @@ img {
 }
 @keyframes bounce-in {
   0% {
-    transform: scale(7);
+    transform: scale(0.5);
   }
   50% {
-    transform: scale(5);
-  }
-  70% {
-    transform: scale(3);
+    transform: scale(1.2);
   }
   100% {
     transform: scale(1);
