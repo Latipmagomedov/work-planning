@@ -1,6 +1,5 @@
 import axios from "axios";
 import store from "../store";
-import Vue from "vue";
 
 const api = axios.create({
   baseURL: process.env.VUE_APP_BASE_API,
