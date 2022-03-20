@@ -24,7 +24,7 @@
         >
           <skeleton-card
               v-show="!onload"
-              v-for="item in 30"
+              v-for="item in 6"
               :key="item"
               :position="position"
           />
