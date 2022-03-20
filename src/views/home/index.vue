@@ -1,41 +1,41 @@
 <template>
   <div class="home">
     <div class="home__content">
-      <desktop-menu ref="desktopMenu" />
+      <desktop-menu ref="desktopMenu"/>
       <main-header
-        @search="search = $event"
-        @togglePostion="togglePostion"
-        @toggleDesktopMenu="toggleDesktopMenu"
+          @search="search = $event"
+          @togglePostion="togglePostion"
+          @toggleDesktopMenu="toggleDesktopMenu"
       />
-      <welcome-banner class="home__banner" :length="tasks.length" />
+      <welcome-banner class="home__banner" :length="tasks.length"/>
       <div class="home__wrapper container">
         <h2
-          class="home__title"
-          :class="{ home__title_empty: !tasks.length && onload }"
-          v-if="onload"
+            class="home__title"
+            :class="{ home__title_empty: !tasks.length && onload }"
+            v-if="onload"
         >
           {{ tasks.length ? "Задачи" : "Задач пока нет (" }}
         </h2>
         <h2 class="home__title" v-if="!onload">Загрузка . . .</h2>
 
         <div
-          class="home__tasks"
-          :class="{ home__tasks_col: position === 'column' }"
+            class="home__tasks"
+            :class="{ home__tasks_col: position === 'column' }"
         >
           <skeleton-card
-            v-show="!onload"
-            v-for="item in 30"
-            :key="item"
-            :position="position"
+              v-show="!onload"
+              v-for="item in 30"
+              :key="item"
+              :position="position"
           />
 
           <task-card
-            v-show="onload"
-            v-for="task in allTasks"
-            :key="task.id"
-            :task="task"
-            :position="position"
-            @openTask="$router.push(`/task/${task.id}`)"
+              v-show="onload"
+              v-for="task in filterTasks"
+              :key="task.id"
+              :task="task"
+              :position="position"
+              @openTask="$router.push(`/task/${task.id}`)"
           />
         </div>
       </div>
@@ -43,7 +43,7 @@
         <span>+</span>
         <p>Создать задачу</p>
       </button>
-      <nav-menu />
+      <nav-menu/>
     </div>
   </div>
 </template>
@@ -75,13 +75,10 @@ export default {
     };
   },
   computed: {
-    allTasks() {
-      let filtration = [];
-      this.tasks.forEach((item) => {
-        if (item.title.toLowerCase().indexOf(this.search.toLowerCase()) >= 0)
-          filtration.push(item);
+    filterTasks() {
+      return this.tasks.filter(item => {
+        return item.title.toLowerCase().includes(this.search.toLowerCase())
       });
-      return filtration;
     },
   },
   created() {
@@ -89,8 +86,7 @@ export default {
   },
   methods: {
     async getTasks() {
-      const response = await this.$task.getTasks();
-      this.tasks = response;
+      this.tasks = await this.$task.getTasks();
       if (this.tasks) this.onload = true;
     },
     togglePostion(position) {

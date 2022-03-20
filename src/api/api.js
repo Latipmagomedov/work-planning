@@ -5,6 +5,7 @@ const api = axios.create({
   baseURL: process.env.VUE_APP_BASE_API,
   withCredentials: true,
 });
+
 api.interceptors.request.use(
   async (config) => {
     if (store.getters.token) {
