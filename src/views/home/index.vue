@@ -4,8 +4,8 @@
       <desktop-menu ref="desktopMenu"/>
       <main-header
           @search="search = $event"
-          @togglePostion="togglePostion"
-          @toggleDesktopMenu="toggleDesktopMenu"
+          @togglePostion="position = $event"
+          @toggleDesktopMenu="$refs.desktopMenu.toggleMenu()"
       />
       <welcome-banner class="home__banner" :length="tasks.length"/>
       <div class="home__wrapper container">
@@ -88,13 +88,7 @@ export default {
     async getTasks() {
       this.tasks = await this.$task.getTasks();
       if (this.tasks) this.onload = true;
-    },
-    togglePostion(position) {
-      this.position = position;
-    },
-    toggleDesktopMenu() {
-      this.$refs.desktopMenu.toggleMenu();
-    },
+    }
   },
 };
 </script>
