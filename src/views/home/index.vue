@@ -20,8 +20,7 @@
 
         <div
             class="home__tasks"
-            :class="{ home__tasks_col: position === 'column' }"
-        >
+            :class="{ home__tasks_col: position === 'column' }">
           <skeleton-card
               v-show="!onload"
               v-for="item in 6"
@@ -76,9 +75,9 @@ export default {
   },
   computed: {
     filterTasks() {
-      return this.tasks.filter(item => {
-        return item.title.toLowerCase().includes(this.search.toLowerCase())
-      });
+      return this.tasks.filter(item =>
+          item.title.toLowerCase()
+              .includes(this.search.toLowerCase()));
     },
   },
   created() {
