@@ -1,28 +1,28 @@
 <template>
   <div class="profile">
     <div class="profile__content">
-      <desktop-menu ref="desktopMenu" />
+      <desktop-menu ref="desktopMenu"/>
       <div class="profile__wrapper container">
         <div class="profile__info">
           <div class="profile__info-wrapper" v-if="!qrCodeOpne">
             <div class="profile__upload">
               <div class="profile__btn" @click="toggleQrCode">
-                <img src="@/assets/images/icons/qr.svg" alt="qr" />
+                <img src="@/assets/images/icons/qr.svg" alt="qr"/>
               </div>
               <div class="profile__ava" v-if="!imageUrl">
                 {{ user.username ? user.username[0].toUpperCase() : "U" }}
               </div>
               <div
-                class="profile__ava"
-                v-if="imageUrl"
-                :style="{ backgroundImage: `url(${imageUrl})` }"
+                  class="profile__ava"
+                  v-if="imageUrl"
+                  :style="{ backgroundImage: `url(${imageUrl})` }"
               ></div>
               <div class="profile__btn" v-if="!imageUrl">
                 <p>+</p>
-                <input type="file" @change="uploadImage" />
+                <input type="file" @change="uploadImage"/>
               </div>
               <div class="profile__btn" v-if="imageUrl" @click="deleteImage">
-                <img src="@/assets/images/icons/x.svg" alt="remove" />
+                <img src="@/assets/images/icons/x.svg" alt="remove"/>
               </div>
             </div>
             <div class="profile__name">
@@ -31,11 +31,11 @@
             <button class="profile__signout" @click="logout">Выйти</button>
           </div>
 
-          <qr-code v-if="qrCodeOpne" @closeQrCode="toggleQrCode" />
+          <qr-code v-if="qrCodeOpne" @closeQrCode="toggleQrCode"/>
         </div>
       </div>
     </div>
-    <nav-menu />
+    <nav-menu/>
   </div>
 </template>
 
@@ -62,10 +62,14 @@ export default {
   },
   methods: {
     async getUser() {
-      const response = await this.$profile.getProfile();
-      this.user = response;
-      if (response.profileImage) {
-        this.imageUrl = `${process.env.VUE_APP_BASE_API}${response.profileImage}`;
+      try {
+        const response = await this.$profile.getProfile();
+        this.user = response;
+        if (response.profileImage) {
+          this.imageUrl = `${process.env.VUE_APP_BASE_API}${response.profileImage}`;
+        }
+      } catch (error) {
+        console.log(error)
       }
     },
     async uploadImage(e) {
@@ -73,14 +77,20 @@ export default {
       const formData = new FormData();
       formData.append("files", file[0]);
 
-      const response = await this.$profile.uploadImage(formData);
-      if (response) {
-        this.imageUrl = `${process.env.VUE_APP_BASE_API}${response}`;
+      try {
+        const response = await this.$profile.uploadImage(formData);
+        if (response) this.imageUrl = `${process.env.VUE_APP_BASE_API}${response}`;
+      } catch (error) {
+        console.log(error)
       }
     },
     async deleteImage() {
-      await this.$profile.deleteImage();
-      this.imageUrl = "";
+      try {
+        await this.$profile.deleteImage();
+        this.imageUrl = "";
+      } catch (error) {
+        console.log(error)
+      }
     },
     logout() {
       this.$store.dispatch("user/logout");

@@ -3,28 +3,28 @@
     <div class="container">
       <div class="task__header">
         <div class="task__btn-icon" @click="$router.push('/')">
-          <img src="@/assets/images/icons/arrow-left.svg" alt="back" />
+          <img src="@/assets/images/icons/arrow-left.svg" alt="back"/>
         </div>
         <div class="task__btns">
           <div
-            class="task__btn-icon"
-            @click="
+              class="task__btn-icon"
+              @click="
               $router.push({ path: '/create-task', query: { edit: taskId } })
             "
           >
-            <img src="@/assets/images/icons/edit.svg" alt="edit" />
+            <img src="@/assets/images/icons/edit.svg" alt="edit"/>
           </div>
           <div class="task__btn-icon" @click="deleteTask">
-            <img src="@/assets/images/icons/delete.svg" alt="delete" />
+            <img src="@/assets/images/icons/delete.svg" alt="delete"/>
           </div>
         </div>
       </div>
       <div class="task__wrapper">
         <div class="task__wrapper-header" @click="completedTask">
           <div
-            class="checkbox"
-            :class="{ checkbox_active: task.completed }"
-            v-if="onload"
+              class="checkbox"
+              :class="{ checkbox_active: task.completed }"
+              v-if="onload"
           >
             <span></span>
           </div>
@@ -36,25 +36,25 @@
         </p>
         <ul class="task__subtasks">
           <li
-            class="task__subtask"
-            v-show="onload"
-            v-for="(subtask, index) in task.subtasks"
-            :key="subtask.id"
-            @click="completedSubtask(index)"
+              class="task__subtask"
+              v-show="onload"
+              v-for="(subtask, index) in task.subtasks"
+              :key="subtask.id"
+              @click="completedSubtask(index)"
           >
             <div
-              class="checkbox"
-              :class="{ checkbox_active: subtask.completed }"
+                class="checkbox"
+                :class="{ checkbox_active: subtask.completed }"
             >
               <span></span>
             </div>
             <p class="task__subtask-title">{{ subtask.title }}</p>
           </li>
           <li
-            class="task__subtask"
-            v-show="!onload"
-            v-for="item in 14"
-            :key="item"
+              class="task__subtask"
+              v-show="!onload"
+              v-for="item in 14"
+              :key="item"
           ></li>
         </ul>
       </div>
@@ -87,16 +87,28 @@ export default {
   },
   methods: {
     async getTask() {
-      const response = await this.$task.getTask(this.taskId);
-      this.task = response[0];
-      if (this.task) this.onload = true;
+      try {
+        const response = await this.$task.getTask(this.taskId);
+        this.task = response[0];
+        if (this.task) this.onload = true;
+      } catch (error) {
+        console.log(error)
+      }
     },
     async deleteTask() {
-      await this.$task.deleteTask(this.taskId);
-      this.$router.push("/");
+      try {
+        await this.$task.deleteTask(this.taskId);
+        this.$router.push("/");
+      } catch (error) {
+        console.log(error)
+      }
     },
     async updateTask() {
-      await this.$task.updateTask(this.task);
+      try {
+        await this.$task.updateTask(this.task);
+      } catch (error) {
+        console.log(error)
+      }
     },
     completedTask() {
       this.task.completed = !this.task.completed;
@@ -109,7 +121,7 @@ export default {
     },
     completedSubtask(index) {
       this.task.subtasks[index].completed =
-        !this.task.subtasks[index].completed;
+          !this.task.subtasks[index].completed;
       if (this.task.subtasks.every((elem) => elem.completed === true))
         this.task.completed = true;
       if (this.task.subtasks[index].completed === false)
@@ -124,6 +136,7 @@ export default {
 <style lang="scss" scoped>
 .task {
   user-select: text;
+
   &__header {
     width: 100%;
     margin-top: 10px;

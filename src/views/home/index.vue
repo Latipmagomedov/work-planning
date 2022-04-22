@@ -85,8 +85,12 @@ export default {
   },
   methods: {
     async getTasks() {
-      this.tasks = await this.$task.getTasks();
-      if (this.tasks) this.onload = true;
+      try {
+        this.tasks = await this.$task.getTasks();
+        if (this.tasks) this.onload = true;
+      } catch (error) {
+        console.log(error)
+      }
     }
   },
 };

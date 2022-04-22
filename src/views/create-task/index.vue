@@ -3,31 +3,31 @@
     <div class="container">
       <div class="add-task__header">
         <div class="add-task__back" @click="$router.push('/')">
-          <img src="@/assets/images/icons/arrow-left.svg" alt="back" />
+          <img src="@/assets/images/icons/arrow-left.svg" alt="back"/>
         </div>
         <p class="add-task__header-title">Новая задача</p>
       </div>
       <div class="add-task__warpper">
         <input
-          type="text"
-          placeholder="Название задачи"
-          class="add-task__inp"
-          :class="{
+            type="text"
+            placeholder="Название задачи"
+            class="add-task__inp"
+            :class="{
             'inp-error': $v.task.title.$dirty && !$v.task.title.required,
           }"
-          v-model="task.title"
+            v-model="task.title"
         />
         <textarea
-          class="add-task__description"
-          placeholder="Описание задачи"
-          v-model="task.description"
+            class="add-task__description"
+            placeholder="Описание задачи"
+            v-model="task.description"
         ></textarea>
         <div class="add-task__inp-wrapper">
           <p class="add-task__inp-name">Деделайн</p>
           <div
-            class="add-task__fake-inp"
-            :class="{ 'add-task__fake-inp_active': task.deadline }"
-            @click="showDatepicker = !showDatepicker"
+              class="add-task__fake-inp"
+              :class="{ 'add-task__fake-inp_active': task.deadline }"
+              @click="showDatepicker = !showDatepicker"
           >
             <p>{{ task.deadline ? getSelectedDate : "Деделайн" }}</p>
           </div>
@@ -35,30 +35,30 @@
 
         <transition name="fade">
           <date-picker
-            class="add-task__datepicker"
-            :min-date="new Date()"
-            v-if="showDatepicker"
-            v-model="task.deadline"
-            mode="dateTime"
-            is-dark
-            is24hr
-            color="blue"
+              class="add-task__datepicker"
+              :min-date="new Date()"
+              v-if="showDatepicker"
+              v-model="task.deadline"
+              mode="dateTime"
+              is-dark
+              is24hr
+              color="blue"
           />
         </transition>
         <div class="add-task__subtasks">
           <h3 class="add-task__subtasks-title">Подзадачи</h3>
           <div
-            class="add-task__subtasks-inp"
-            v-for="(subtask, index) in task.subtasks"
-            :key="index"
+              class="add-task__subtasks-inp"
+              v-for="(subtask, index) in task.subtasks"
+              :key="index"
           >
             <input
-              type="text"
-              placeholder="Название подзадачи"
-              v-model="subtask.title"
+                type="text"
+                placeholder="Название подзадачи"
+                v-model="subtask.title"
             />
             <div class="add-task__subtasks-remove" @click="removeTask(index)">
-              <img src="@/assets/images/icons/x.svg" alt="remove" />
+              <img src="@/assets/images/icons/x.svg" alt="remove"/>
             </div>
           </div>
           <button class="add-task__subtasks-add" @click="addSubtask">
@@ -66,18 +66,18 @@
           </button>
         </div>
         <button
-          class="add-task__add"
-          v-if="!editTaskId"
-          @click="addTasks"
-          :disabled="disbledBtn"
+            class="add-task__add"
+            v-if="!editTaskId"
+            @click="addTasks"
+            :disabled="disbledBtn"
         >
           Добавить задачу
         </button>
         <button
-          class="add-task__add"
-          v-if="editTaskId"
-          @click="editTasks"
-          :disabled="disbledBtn"
+            class="add-task__add"
+            v-if="editTaskId"
+            @click="editTasks"
+            :disabled="disbledBtn"
         >
           Сохранить
         </button>
@@ -87,7 +87,7 @@
 </template>
 
 <script>
-import { required } from "vuelidate/lib/validators";
+import {required} from "vuelidate/lib/validators";
 
 export default {
   name: "AddTask",
@@ -129,13 +129,17 @@ export default {
   },
   methods: {
     async getTask(id) {
-      const response = await this.$task.getTask(id);
-      this.task = response[0];
-      if (response[0].deadline)
-        this.task.deadline = new Date(response[0].deadline);
+      try {
+        const response = await this.$task.getTask(id);
+        this.task = response[0];
+        if (response[0].deadline)
+          this.task.deadline = new Date(response[0].deadline);
+      } catch (error) {
+        console.log(error)
+      }
     },
     addSubtask() {
-      this.task.subtasks.push({ title: "", completed: false });
+      this.task.subtasks.push({title: "", completed: false});
     },
     removeTask(index) {
       this.task.subtasks.splice(index, 1);
@@ -155,14 +159,18 @@ export default {
           completed: this.task.completed,
           deadline: this.task.deadline,
           subtasks:
-            this.task.subtasks[0] && this.task.subtasks[0].title
-              ? this.task.subtasks
-              : [],
+              this.task.subtasks[0] && this.task.subtasks[0].title
+                  ? this.task.subtasks
+                  : [],
         },
       ];
 
-      await this.$task.createTask(body);
-      this.$router.push("/");
+      try {
+        await this.$task.createTask(body);
+        this.$router.push("/");
+      } catch (error) {
+        console.log(error)
+      }
     },
     async editTasks() {
       if (this.$v.$invalid) {
@@ -172,8 +180,12 @@ export default {
 
       this.disbledBtn = true;
 
-      await this.$task.updateTask(this.task);
-      this.$router.push(`/task/${this.editTaskId}`);
+      try {
+        await this.$task.updateTask(this.task);
+        this.$router.push(`/task/${this.editTaskId}`);
+      } catch (error) {
+        console.log(error)
+      }
     },
   },
 };
