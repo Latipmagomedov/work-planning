@@ -132,8 +132,7 @@ export default {
       try {
         const response = await this.$task.getTask(id);
         this.task = response[0];
-        if (response[0].deadline)
-          this.task.deadline = new Date(response[0].deadline);
+        if (response[0].deadline) this.task.deadline = new Date(response[0].deadline);
       } catch (error) {
         console.log(error)
       }
@@ -158,12 +157,11 @@ export default {
           description: this.task.description,
           completed: this.task.completed,
           deadline: this.task.deadline,
-          subtasks:
-              this.task.subtasks[0] && this.task.subtasks[0].title
-                  ? this.task.subtasks
-                  : [],
+          subtasks: [],
         },
       ];
+
+      if (this.task.subtasks[0] && this.task.subtasks[0].title) body[0].subtasks = this.task.subtasks
 
       try {
         await this.$task.createTask(body);

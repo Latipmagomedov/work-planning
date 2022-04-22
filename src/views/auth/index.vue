@@ -7,128 +7,128 @@
         </h2>
         <div class="sign__form">
           <div
-            class="sign__inp"
-            :class="{
-              sign__inp_error:
+              class="sign__inp"
+              :class="{
+              'sign__inp_error':
                 $v.form.name.$dirty &&
                 (!$v.form.name.required || !$v.form.name.minLength),
             }"
           >
             <input
-              type="text"
-              id="name"
-              autocomplete="off"
-              placeholder="Ваш логин"
-              v-model="form.name"
+                type="text"
+                id="name"
+                autocomplete="off"
+                placeholder="Ваш логин"
+                v-model="form.name"
             />
             <label
-              for="name"
-              class="sign__label"
-              v-if="$v.form.name.$dirty && !$v.form.name.required"
-              >Это обязательное поле</label
+                for="name"
+                class="sign__label"
+                v-if="$v.form.name.$dirty && !$v.form.name.required"
+            >Это обязательное поле</label
             >
             <label
-              for="name"
-              class="sign__label"
-              v-if="$v.form.name.$dirty && !$v.form.name.minLength"
-              >Минимальное количество символов 4</label
+                for="name"
+                class="sign__label"
+                v-if="$v.form.name.$dirty && !$v.form.name.minLength"
+            >Минимальное количество символов 4</label
             >
           </div>
           <div
-            class="sign__inp"
-            :class="{
-              sign__inp_error:
+              class="sign__inp"
+              :class="{
+              'sign__inp_error':
                 $v.form.name.$dirty &&
                 (!$v.form.password.required || !$v.form.password.minLength),
             }"
           >
             <input
-              type="password"
-              placeholder="Пароль"
-              v-model="form.password"
+                type="password"
+                placeholder="Пароль"
+                v-model="form.password"
             />
             <label
-              for="name"
-              class="sign__label"
-              v-if="$v.form.password.$dirty && !$v.form.password.required"
-              >Это обязательное поле</label
+                for="name"
+                class="sign__label"
+                v-if="$v.form.password.$dirty && !$v.form.password.required"
+            >Это обязательное поле</label
             >
             <label
-              for="name"
-              class="sign__label"
-              v-if="$v.form.password.$dirty && !$v.form.password.minLength"
-              >Минимальное количество символов 8</label
+                for="name"
+                class="sign__label"
+                v-if="$v.form.password.$dirty && !$v.form.password.minLength"
+            >Минимальное количество символов 8</label
             >
           </div>
           <div
-            class="sign__inp"
-            :class="{
-              sign__inp_error:
+              class="sign__inp"
+              :class="{
+              'sign__inp_error':
                 $v.form.name.$dirty &&
                 (!$v.form.confirmPassword.required ||
                   !$v.form.confirmPassword.minLength ||
                   !$v.form.confirmPassword.sameAsPassword),
             }"
-            v-if="formType === 'register'"
+              v-if="formType === 'register'"
           >
             <input
-              type="password"
-              placeholder="Повторите пароль"
-              v-model="form.confirmPassword"
+                type="password"
+                placeholder="Повторите пароль"
+                v-model="form.confirmPassword"
             />
             <label
-              for="name"
-              class="sign__label"
-              v-if="
+                for="name"
+                class="sign__label"
+                v-if="
                 $v.form.confirmPassword.$dirty &&
                 !$v.form.confirmPassword.required
               "
-              >Это обязательное поле</label
+            >Это обязательное поле</label
             >
             <label
-              for="name"
-              class="sign__label"
-              v-if="
+                for="name"
+                class="sign__label"
+                v-if="
                 $v.form.confirmPassword.$dirty &&
                 !$v.form.confirmPassword.minLength
               "
-              >Минимальное количество символов 8</label
+            >Минимальное количество символов 8</label
             >
             <label
-              for="name"
-              class="sign__label"
-              v-if="
+                for="name"
+                class="sign__label"
+                v-if="
                 $v.form.confirmPassword.$dirty &&
                 $v.form.confirmPassword.minLength &&
                 $v.form.confirmPassword.required &&
                 !$v.form.confirmPassword.sameAsPassword
               "
-              >Пароли не совпадают</label
+            >Пароли не совпадают</label
             >
           </div>
 
           <div class="sign__toggle" @click="toggleForm">
             {{
               formType === "register"
-                ? "У меня уже есть аккаунт"
-                : "У меня нет аккаунта"
+                  ? "У меня уже есть аккаунт"
+                  : "У меня нет аккаунта"
             }}
           </div>
 
           <div class="sign__btns">
             <button
-              class="sign__btn-next"
-              :class="{ 'sign__btn-next_login': formType === 'login' }"
-              @click="next"
+                class="sign__btn-next"
+                :class="{ 'sign__btn-next_login': formType === 'login' }"
+                @click="next"
             >
               Продолжить
             </button>
             <button
-              class="sign__btn-camera"
-              v-if="formType === 'login'"
-              @click="openCamera"
+                class="sign__btn-camera"
+                v-if="formType === 'login'"
+                @click="openCamera"
             >
-              <img src="@/assets/images/icons/qr.svg" alt="qr" />
+              <img src="@/assets/images/icons/qr.svg" alt="qr"/>
             </button>
           </div>
         </div>
@@ -136,7 +136,7 @@
 
       <full-modal-window>
         <template slot="body">
-          <camera-scanner v-if="this.$store.getters.modalName === 'camera'" />
+          <camera-scanner v-if="this.$store.getters.modalName === 'camera'"/>
         </template>
       </full-modal-window>
     </div>
@@ -144,13 +144,11 @@
 </template>
 
 <script>
-import { required, minLength, sameAs } from "vuelidate/lib/validators";
+import {required, minLength, sameAs} from "vuelidate/lib/validators";
 import CameraScanner from "@/components/fullModalWindow/modalBodies/cameraScanner";
 
 export default {
-  components: {
-    CameraScanner,
-  },
+  components: {CameraScanner},
   data() {
     return {
       formType: "register",
@@ -209,11 +207,12 @@ export default {
       }
     },
     async register() {
+      const body = {
+        username: this.form.name,
+        password: this.form.password,
+      };
+
       try {
-        const body = {
-          username: this.form.name,
-          password: this.form.password,
-        };
         await this.$auth.signUp(body);
         this.toggleForm();
       } catch (error) {
@@ -233,7 +232,7 @@ export default {
       };
       try {
         const response = await this.$auth.signIn(body);
-        this.$store.dispatch("user/login", response.token);
+        await this.$store.dispatch("user/login", response.token);
         this.$router.push("/");
       } catch (error) {
         this.$message.open({
@@ -246,11 +245,7 @@ export default {
       }
     },
     toggleForm() {
-      if (this.formType === "register") {
-        this.formType = "login";
-      } else {
-        this.formType = "register";
-      }
+      this.formType === "register" ? this.formType = "login" : this.formType = "register"
     },
     openCamera() {
       this.$store.dispatch("modal/toggle", "camera");
