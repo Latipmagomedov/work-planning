@@ -2,19 +2,19 @@ import api from "./api";
 
 const tasks = {
     createTask(payload) {
-        return api.post("/api/task/create", payload);
+        return api.post("/task/create", payload);
     },
     getTasks() {
-        return api.get(`/api/task/all`);
+        return api.get(`/task/all`);
     },
     getTask(id) {
-        return api.get(`/api/task/${id}`);
+        return api.get(`/task/${id}`);
     },
     updateTask(payload) {
-        return api.post(`/api/task/update`, payload);
+        return api.post(`/task/update`, payload);
     },
     deleteTask(id) {
-        return api.post(`/api/task/delete/${id}`);
+        return api.post(`/task/delete/${id}`);
     },
 };
 

@@ -216,12 +216,12 @@ export default {
         await this.$auth.signUp(body);
         this.toggleForm();
       } catch (error) {
-        this.$message.open({
-          title: "Ошибка",
-          text: error.response.data.message,
-          type: "error",
-          time: 3000,
-        });
+        // this.$message.open({
+        //   title: "Ошибка",
+        //   text: error.response.data.message,
+        //   type: "error",
+        //   time: 3000,
+        // });
         console.log(error.response);
       }
     },
@@ -235,12 +235,12 @@ export default {
         await this.$store.dispatch("user/login", response.token);
         this.$router.push("/");
       } catch (error) {
-        this.$message.open({
-          title: "Ошибка",
-          text: error.response.data.message,
-          type: "error",
-          time: 3000,
-        });
+        // this.$message.open({
+        //   title: "Ошибка",
+        //   text: error.response.data.message,
+        //   type: "error",
+        //   time: 3000,
+        // });
         console.log(error.response);
       }
     },

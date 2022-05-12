@@ -1,5 +1,6 @@
 import axios from "axios";
 import store from "../store";
+import notify from "../components/notification/instance";
 
 const api = axios.create({
   baseURL: process.env.VUE_APP_BASE_API,
@@ -25,6 +26,12 @@ api.interceptors.response.use(
     return response.data;
   },
   (error) => {
+      notify({
+          title: 'Ошибка',
+          text: error.response.data,
+          bg: '#FF4B6B',
+          autoClose: 4000
+      })
     return Promise.reject(error);
   }
 );

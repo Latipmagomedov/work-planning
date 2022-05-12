@@ -2,13 +2,13 @@ import api from "./api";
 
 const auth = {
     getProfile() {
-        return api.get("/api/account");
+        return api.get("/account");
     },
     uploadImage(payload) {
-        return api.post("/api/account/upload-image", payload);
+        return api.post("/account/upload-image", payload);
     },
     deleteImage() {
-        return api.get("/api/account/delete-image");
+        return api.get("/account/delete-image");
     }
 };
 

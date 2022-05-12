@@ -5,8 +5,8 @@ import router from "./router";
 import store from "./store";
 
 import ApiPlugin from "./plugins/api";
-import MessagePlugin from "./plugins/message";
 
+import Notification from '@/components/notification'
 import FullModalWindow from "@/components/fullModalWindow/index.vue";
 
 import Calendar from "v-calendar/lib/components/calendar.umd";
@@ -18,7 +18,7 @@ import VueQrcodeReader from "vue-qrcode-reader";
 Vue.config.productionTip = false;
 
 Vue.use(ApiPlugin);
-Vue.use(MessagePlugin);
+Vue.use(Notification)
 
 Vue.component("FullModalWindow", FullModalWindow);
 

@@ -24,12 +24,12 @@ export default {
           const response = await this.$profile.getProfile();
           if (response.username) this.$router.push("/");
         } catch (error) {
-          this.$message.open({
-            title: "Ошибка",
-            text: error.response.data.message,
-            type: "error",
-            time: 3000,
-          });
+          // this.$message.open({
+          //   title: "Ошибка",
+          //   text: error.response.data.message,
+          //   type: "error",
+          //   time: 3000,
+          // });
           console.log(error.response);
         }
       }
