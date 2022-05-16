@@ -146,6 +146,7 @@
 <script>
 import {required, minLength, sameAs} from "vuelidate/lib/validators";
 import CameraScanner from "@/components/fullModalWindow/modalBodies/cameraScanner";
+import notify from "../../components/notification/instance";
 
 export default {
   components: {CameraScanner},
@@ -216,13 +217,12 @@ export default {
         await this.$auth.signUp(body);
         this.toggleForm();
       } catch (error) {
-        // this.$message.open({
-        //   title: "Ошибка",
-        //   text: error.response.data.message,
-        //   type: "error",
-        //   time: 3000,
-        // });
-        console.log(error.response);
+        this.notify({
+          title: 'Ошибка регистрации',
+          description: error.response.data.message,
+          bg: '#FF4B6B',
+          autoClose: 3000
+        })
       }
     },
     async login() {
@@ -235,13 +235,13 @@ export default {
         await this.$store.dispatch("user/login", response.token);
         this.$router.push("/");
       } catch (error) {
-        // this.$message.open({
-        //   title: "Ошибка",
-        //   text: error.response.data.message,
-        //   type: "error",
-        //   time: 3000,
-        // });
-        console.log(error.response);
+        console.log(error.response.data.message)
+        this.notify({
+          title: 'Ошибка авторизации',
+          description: error.response.data.message,
+          bg: '#FF4B6B',
+          autoClose: 3000
+        })
       }
     },
     toggleForm() {

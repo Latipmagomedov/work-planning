@@ -61,7 +61,7 @@ export default {
   position: fixed;
   right: 20px;
   top: 20px;
-  width: 300px;
+  width: 310px;
   z-index: 999;
 
   @media (max-width: 550px) {
@@ -84,8 +84,8 @@ export default {
   }
 
   &__title {
-    max-width: calc(100% - 90px);
-    font-size: 18px;
+    max-width: calc(100% - 40px);
+    font-size: 17px;
   }
 
   &__close {
